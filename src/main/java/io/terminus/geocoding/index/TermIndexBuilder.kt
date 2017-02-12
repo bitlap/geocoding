@@ -123,6 +123,7 @@ open class TermIndexBuilder(
     }
     private fun deepFirstQueryRound(text: String, pos: Int, entries: Map<Char, TermIndexEntry>, visitor: TermIndexVisitor) {
         // 获取索引对象
+        if (pos > text.length - 1) return
         val entry = entries[text[pos]] ?: return
 
         if (entry.children != null && pos + 1 <= text.length - 1) {

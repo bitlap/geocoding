@@ -3,7 +3,6 @@ package io.terminus.geocoding.normalizing
 import io.terminus.geocoding.Geocoding
 import org.junit.Test
 import java.sql.DriverManager
-import java.util.regex.Pattern
 
 /**
  * Desc: 测试地址标准化
@@ -34,6 +33,11 @@ class TestNormalizing {
         add = "山东青岛市北区山东省青岛市市北区水清沟街道九江路20号大都会3号楼2单元1303" //
         add = "中国山东青岛城阳区湘潭路【华胥美邦 到了联系20-1-1402】 (中铁华胥美邦附近)"
         add = "辽宁沈阳沈河区辽宁沈阳市沈河区一环内会武街56号4-3-2"
+        add = "1008中国" // fix
+        add = "清徐县中国山西太原清徐县清徐县人民医院附近苹果社区2号楼1单元3层" // fix 3层/楼
+        add = "辽宁辽阳宏伟区辽宁省辽阳市宏伟区新村街道龙鼎山小区B区08栋3组401号" // fix 3组
+        add = "北京北京市西城区 白纸坊街道右安门内西街甲10号院11楼3门501" // fix 3门
+        // add = "武夷山市中国福建南平武夷山市海晨土菜馆" // fix 3门
         val address = Geocoding.normalizing(add)
         println(address)
     }
@@ -66,14 +70,4 @@ class TestNormalizing {
         connection.close()
     }
 
-    @Test
-    fun test() {
-        val p = Pattern.compile(
-                "((路|街|巷)[0-9]+号([0-9A-Z一二三四五六七八九十][\\#\\-一－/\\\\]|楼)?)?([0-9A-Z一二三四五六七八九十]+(栋|橦|幢|座|号楼|号|\\#楼?)){0,1}([一二三四五六七八九十东西南北甲乙丙0-9]+([\\#\\-一－/\\\\]|单元|门|梯|层|座))?([0-9]+([\\#\\-一－/\\\\]|室|房)?)?([0-9]+号?)?"
-        )
-        var matcher = p.matcher("甘肃酒泉肃州区甘肃省酒泉市肃州区东南街街道东南街街道甘肃省酒泉市肃州区南环东路3号2栋4-6-2号")
-        while (matcher.find()) {
-            println(matcher.group(0))
-        }
-    }
 }

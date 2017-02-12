@@ -38,6 +38,7 @@ fun String.take(begin: Int): String {
     if (begin > this.length - 1) return ""
     return this.substring(begin)
 }
+
 fun String.take(begin: Int, end: Int): String {
     if (this.isNullOrBlank()) return this
     val s = if (begin <= 0) 0 else begin
@@ -74,8 +75,8 @@ fun String.removeRepeatNum(length: Int): String {
     val sb = StringBuilder(this.length)
     var count = 0
     this.forEachIndexed { i, c ->
-        if (c >= '0' && c <='9') {
-            count ++
+        if (c in '0'..'9') {
+            count++
             return@forEachIndexed
         }
         // 如果小于重复出现的长度
@@ -92,3 +93,22 @@ fun String.removeRepeatNum(length: Int): String {
     return sb.toString()
 }
 
+/**
+ * 判断是否是纯数字
+ */
+fun String?.isNumericChars(): Boolean {
+    if (this.isNullOrBlank()) return false
+    return this!!.none {
+        it !in '0'..'9'
+    }
+}
+
+/**
+ * 全部为 ASCII 字母
+ */
+fun String?.isAsciiChars(): Boolean {
+    if (this.isNullOrBlank()) return false
+    return this!!.none {
+        it !in 'a'..'z' && it !in 'A'..'Z'
+    }
+}
