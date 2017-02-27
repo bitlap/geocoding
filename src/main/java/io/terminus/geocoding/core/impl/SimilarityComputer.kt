@@ -1,8 +1,8 @@
 package io.terminus.geocoding.core.impl
 
 import io.terminus.geocoding.core.Computer
+import io.terminus.geocoding.core.segment.AsciiSegmenter
 import io.terminus.geocoding.core.segment.IKAnalyzerSegmenter
-import io.terminus.geocoding.core.segment.SimpleSegmenter
 import io.terminus.geocoding.model.Address
 import io.terminus.geocoding.similarity.Document
 import io.terminus.geocoding.similarity.MatchedResult
@@ -38,7 +38,9 @@ import io.terminus.geocoding.utils.isNumericChars
 open class SimilarityComputer : Computer {
 
     private val segmenter = IKAnalyzerSegmenter() // text的分词, 默认 ik 分词器
-    private val simpleSegmenter = SimpleSegmenter() // 暂时用于处理 building 的分词
+
+    // private val simpleSegmenter = SimpleSegmenter() // 暂时用于处理 building 的分词
+    private val simpleSegmenter = AsciiSegmenter() // 暂时用于处理 building 的分词
 
     // 中文数字字符
     private val NUMBER_CN = arrayOf('一', '二', '三', '四', '五', '六', '七', '八', '九', '０', '１', '２' ,'３' ,'４' ,'５' ,'６' ,'７' ,'８' ,'９')

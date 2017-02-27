@@ -38,6 +38,8 @@ class TestNormalizing {
         add = "辽宁辽阳宏伟区辽宁省辽阳市宏伟区新村街道龙鼎山小区B区08栋3组401号" // fix 3组
         add = "北京北京市西城区 白纸坊街道右安门内西街甲10号院11楼3门501" // fix 3门
         // add = "武夷山市中国福建南平武夷山市海晨土菜馆" // fix 3门
+        add = "延川路116号绿城城园东区7号楼2单元802户" // fix 延川是县区的情况
+        add = "金水路751号1号楼3单元501" // fix 延川是县区的情况
         val address = Geocoding.normalizing(add)
         println(address)
     }

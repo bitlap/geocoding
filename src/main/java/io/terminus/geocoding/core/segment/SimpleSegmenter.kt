@@ -15,6 +15,13 @@ open class SimpleSegmenter : Segmenter {
      * 分词方法
      */
     override fun segment(text: String): List<String> {
+        return segment(text, false)
+    }
+
+    /**
+     * [remove] 是否去除 非ascii字符, 其实只保留英文和数字
+     */
+    protected fun segment(text: String, remove: Boolean): List<String> {
         val segs = arrayListOf<String>()
         if (text.isNullOrBlank()) {
             return segs
@@ -49,7 +56,7 @@ open class SimpleSegmenter : Segmenter {
                 ansiCharNum = 0
                 digitNum = 0
             }
-            segs.add(c.toString())
+            if (!remove) segs.add(c.toString())
         }
         // 截取剩余
         if (digitNum > 0 || ansiCharNum > 0) { //digitNum, ansiCharNum中只可能一个大于0

@@ -41,7 +41,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
 
     companion object {
         // 特殊字符1
-        private val specialChars1 = " \r\n\t,，。·.．;；:：、！@$%*^`~=+&'\"|_-\\/".toCharArray()
+        private val specialChars1 = "　 \r\n\t,，。·.．;；:：、！@$%*^`~=+&'\"|_-\\/".toCharArray()
         // 包裹的特殊字符2
         private val specialChars2 = "{}【】〈〉<>[]「」“”（）()".toCharArray()
 
@@ -52,7 +52,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
          */
         private val P_BUILDING_NUM0 = Pattern.compile(
                 //"((路|街|巷)[0-9]+号([0-9A-Z一二三四五六七八九十][\\#\\-一－/\\\\]|楼)?)?([0-9A-Z一二三四五六七八九十]+(栋|橦|幢|座|号楼|号|\\#楼?)){0,1}([一二三四五六七八九十东西南北甲乙丙0-9]+([\\#\\-一－/\\\\]|单元|门|梯|层|座))?([0-9]+(室|房)?)?"
-                "((路|街|巷)[0-9]+号([0-9A-Z一二三四五六七八九十][\\#\\-一－/\\\\]|楼)?)?([0-9A-Z一二三四五六七八九十]+(栋|橦|幢|座|号楼|号|楼|\\#楼?)){0,1}([一二三四五六七八九十东西南北甲乙丙0-9]+([\\#\\-一－/\\\\]|单元|门|梯|层|座|组))?([0-9]+([\\#\\-一－/\\\\]|室|房|层|楼|号)?)?([0-9]+号?)?"
+                "((路|街|巷)[0-9]+号([0-9A-Z一二三四五六七八九十][\\#\\-一－/\\\\]|楼)?)?([0-9A-Z一二三四五六七八九十]+(栋|橦|幢|座|号楼|号|楼|\\#楼?)){0,1}([一二三四五六七八九十东西南北甲乙丙0-9]+([\\#\\-一－/\\\\]|单元|门|梯|层|座|组))?([0-9]+([\\#\\-一－/\\\\]|室|房|层|楼|号|户)?)?([0-9]+号?)?"
         )
         /**
          * 标准匹配building的模式：xx栋xx单元xxx。<br />
@@ -249,6 +249,9 @@ open class DefaultAddressInterpreter : AddressInterpreter {
         entity.text = entity.text?.trimStart {
             p.matcher("$it").find()
         }
+
+        // 将地址中的 一 -- 等替换为-
+        entity.text = entity.text?.replace(Regex("[一_－/]|(--)"), "-")
     }
 
     // 提取建筑物号
@@ -460,7 +463,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
             roadNum = (ex ?: "") + if (roadNum == null) "" else roadNum
             val leftText = entity.text!!.take(road.length + roadNum.length)
             if (leftText.startsWith("小区")) return false
-            entity.road = road
+            entity.road = fixRoad(road)
             // 仅包含【甲乙丙丁】单个汉字，不能作为门牌号
             if (roadNum.length == 1) {
                 entity.text = roadNum + leftText
@@ -471,6 +474,18 @@ open class DefaultAddressInterpreter : AddressInterpreter {
             return true
         }
         return false
+    }
+
+    // 修复重复出现的情况
+    private fun fixRoad(road: String): String {
+        if (road.isNullOrBlank() || road.length % 2 == 1) return road
+        // 从中间截取
+        val first = road.substring(0, road.length / 2)
+        val second = road.substring(road.length / 2)
+        if (first == second) {
+            return first
+        }
+        return road
     }
 
     // 提取农村信息

@@ -1,10 +1,10 @@
 DROP TABLE IF EXISTS `addr_address`;
 CREATE TABLE `addr_address` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Address Record ID',
-  `province` int(11) NOT NULL DEFAULT '0' COMMENT 'Province ID',
-  `city` int(11) NOT NULL DEFAULT '0' COMMENT 'City ID',
-  `district` int(11) NOT NULL DEFAULT '0' COMMENT 'District ID',
-  `street` int(11) NOT NULL DEFAULT '0' COMMENT 'Street ID',
+  `id` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'Address Record ID',
+  `province` BIGINT(11) NOT NULL DEFAULT '0' COMMENT 'Province ID',
+  `city` BIGINT(11) NOT NULL DEFAULT '0' COMMENT 'City ID',
+  `district` BIGINT(11) NOT NULL DEFAULT '0' COMMENT 'District ID',
+  `street` BIGINT(11) NOT NULL DEFAULT '0' COMMENT 'Street ID',
   `text` varchar(100) NOT NULL DEFAULT '' COMMENT 'Address Text',
   `town` varchar(20) NOT NULL DEFAULT '' COMMENT '镇',
   `village` varchar(5) NOT NULL DEFAULT '' COMMENT '村',
