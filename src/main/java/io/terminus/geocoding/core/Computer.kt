@@ -25,5 +25,5 @@ interface Computer {
      * 2. 为每个Document的Term设置权重
      * 3. 计算两个分词组的余弦相似度
      */
-    fun compute(addr1: Address?, addr2: Address?): MatchedResult?
+    fun compute(addr1: Address?, addr2: Address?): MatchedResult
 }

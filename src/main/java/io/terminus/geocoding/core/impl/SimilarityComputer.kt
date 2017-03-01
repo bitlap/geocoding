@@ -108,7 +108,8 @@ open class SimilarityComputer : Computer {
         val termTexts = terms.map(Term::text)
         tokens.forEach {
             // 如果 terms 中不包含
-            if (!termTexts.contains(it)) {
+            // 并且乡镇道路中不包含
+            if (!termTexts.contains(it) && town != it && village != it && road != it) {
                 terms.add(Term(TermType.Text, it))
             }
         }
@@ -127,13 +128,13 @@ open class SimilarityComputer : Computer {
      * 2. 为每个Document的Term设置权重
      * 3. 计算两个分词组的余弦相似度, 值为0~1，值越大表示相似度越高，返回值为1则表示完全相同
      */
-    override fun compute(addr1: Address?, addr2: Address?): MatchedResult? {
+    override fun compute(addr1: Address?, addr2: Address?): MatchedResult {
         if (addr1 == null || addr2 == null) {
-            return null
+            return MatchedResult()
         }
         // 如果两个地址不在同一个省市区, 则认为是不相同地址
         if (addr1.provinceId != addr2.provinceId || addr1.cityId != addr2.cityId || addr1.districtId != addr2.districtId) {
-            return null
+            return MatchedResult()
         }
 
         // 为每个address计算词条
@@ -141,7 +142,14 @@ open class SimilarityComputer : Computer {
         val doc2 = analyze(addr2)
 
         // 计算两个document的相似度
-        return computeSimilarity(doc1, doc2)
+        val cp1 = computeSimilarity(doc1, doc2)
+        val cp2 = computeSimilarity(doc2, doc1)
+
+        // 暂时获取计算结果最小的那个
+        if (cp1.similarity < cp2.similarity) {
+            return cp1
+        }
+        return cp2
     }
 
 

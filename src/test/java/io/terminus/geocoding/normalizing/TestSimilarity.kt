@@ -35,4 +35,19 @@ open class TestSimilarity {
         println("相似度结果分析 >>>>>>>>> " + Geocoding.similarityWithResult(addr1, addr2))
     }
 
+    @Test
+    fun test_fix_null_test() {
+        // 一般匹配
+        val text1 = "中国湖南郴州宜章县梅田镇【梅田镇】(梅田镇附近)"
+        val text2 = "湖南省郴州市宜章县梅田镇上寮村2组"
+
+        // 标准化
+        val addr2 = Geocoding.normalizing(text1)
+        val addr1 = Geocoding.normalizing(text2)
+        println("addr1 >>>> $addr1")
+        println(">>>>>>>>>>>>>>>>>")
+        println("addr2 >>>> $addr2")
+
+        println("相似度结果分析 >>>>>>>>> " + Geocoding.similarityWithResult(addr1, addr2))
+    }
 }

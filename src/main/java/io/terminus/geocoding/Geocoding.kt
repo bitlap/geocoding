@@ -36,21 +36,21 @@ object Geocoding {
      * 地址的相似度计算
      */
     fun similarity(addr1: String, addr2: String): Double {
-        val compute = Context.getComputer().compute(normalizing(addr1), normalizing(addr2)) ?: return 0.0
+        val compute = Context.getComputer().compute(normalizing(addr1), normalizing(addr2))
         return compute.similarity
     }
     fun similarity(addr1: Address?, addr2: Address?): Double {
-        val compute = Context.getComputer().compute(addr1, addr2) ?: return 0.0
+        val compute = Context.getComputer().compute(addr1, addr2)
         return compute.similarity
     }
 
     /**
      * 地址相似度计算, 包含匹配的所有结果
      */
-    fun similarityWithResult(addr1: String, addr2: String): MatchedResult? {
+    fun similarityWithResult(addr1: String, addr2: String): MatchedResult {
         return Context.getComputer().compute(normalizing(addr1), normalizing(addr2))
     }
-    fun similarityWithResult(addr1: Address?, addr2: Address?): MatchedResult? {
+    fun similarityWithResult(addr1: Address?, addr2: Address?): MatchedResult {
         return Context.getComputer().compute(addr1, addr2)
     }
 
