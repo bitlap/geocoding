@@ -40,6 +40,7 @@ class TestNormalizing {
         // add = "武夷山市中国福建南平武夷山市海晨土菜馆" // fix 3门
         add = "延川路116号绿城城园东区7号楼2单元802户" // fix 延川是县区的情况
         add = "金水路751号1号楼3单元501" // fix 延川是县区的情况
+        add = "中国上海上海宝山区 顾村镇菊太路777弄24号602室"
         val address = Geocoding.normalizing(add)
         println(address)
     }
