@@ -101,10 +101,15 @@ open class RegionInterpreterVisitor (
             // 从未匹配上任何一个省市区，则从全部被索引对象中找出一个级别最高的
             if (!curDivision.hasProvince()) {
 
-                // 在为匹配上任务省市区情况下, 由于 `xx路` 的xx是某县区的别名, 导致错误的匹配。
+                // 在为匹配上任务省市区情况下, 由于 `xx路` 的xx是某县区/市区/省的别名, 如江苏路, 绍兴路等等, 导致错误的匹配。
                 // 如 延安路118号, 错误匹配上了延安县
                 if (!isFullMatch(entry, region) && pos + 1 <= text.length - 1) {
-                    if (region.type == District || region.type == RegionType.Street || region.type == RegionType.Town) { // 县区或街道
+                    if (region.type == Province
+                            || region.type == City
+                            || region.type == District
+                            || region.type == RegionType.Street
+                            || region.type == RegionType.Town) { // 县区或街道
+
                         // 如果是某某路, 街等
                         when (text[pos + 1]) {
                             '路', '街', '巷', '道' -> continue@loop

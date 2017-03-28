@@ -41,6 +41,8 @@ class TestNormalizing {
         add = "延川路116号绿城城园东区7号楼2单元802户" // fix 延川是县区的情况
         add = "金水路751号1号楼3单元501" // fix 延川是县区的情况
         add = "中国上海上海宝山区 顾村镇菊太路777弄24号602室"
+        add = "辽宁大连甘井子区辽宁, 大连, 甘井子区, 泡崖街玉境路26号3—2—1" // fix字符 —
+        add = "绍兴路59号速递易" // fix 绍兴路匹配上绍兴市的情况
         val address = Geocoding.normalizing(add)
         println(address)
     }
