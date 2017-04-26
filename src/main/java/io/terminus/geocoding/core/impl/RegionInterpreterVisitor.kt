@@ -211,7 +211,7 @@ open class RegionInterpreterVisitor (
                         && isFullMatch(entry, region) // 使用的全名匹配
                         && curDivision.city!!.id != region.parentId) {
                     val city = persister.getRegion(region.parentId)!! // 区县的地级市
-                    if (city.parentId == curDivision.province!!.id) {
+                    if (city.parentId == curDivision.province!!.id && !hasThreeDivision()) {
                         mostPriority = 4
                         acceptableItem = item
                         continue
@@ -258,6 +258,15 @@ open class RegionInterpreterVisitor (
             TermType.Street, TermType.Town, TermType.Village, TermType.Ignore -> return true
             else -> return false
         }
+    }
+
+    /**
+     * 当前是否已经完全匹配了省市区了
+     */
+    private fun hasThreeDivision(): Boolean {
+        return (curDivision.hasProvince() && curDivision.hasCity() && curDivision.hasDistrict())
+            && (curDivision.city!!.parentId == curDivision.province!!.id)
+            && (curDivision.district!!.parentId == curDivision.city!!.id)
     }
 
     private fun positioning(acceptedRegion: RegionEntity?, entry: TermIndexEntry, text: String, pos: Int): Int {
