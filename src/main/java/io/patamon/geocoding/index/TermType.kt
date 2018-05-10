@@ -5,7 +5,7 @@ package io.patamon.geocoding.index
  * Desc: 词条的类型
  *      地址虽算不上标准结构化文本，但格式具备一定的规则性，例如省/市/区、道路/门牌号、小区/楼号/户号等
  *      词条类型用来标记该词条属于地址的哪一组成部分，主要用于相似度计算时，为不同组成部分区别性的进行加权
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/12
  */

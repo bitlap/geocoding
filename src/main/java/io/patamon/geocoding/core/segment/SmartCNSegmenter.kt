@@ -6,11 +6,11 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
 
 /**
  * Desc: lucene 的 smartCN 分词器
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/2/6
  */
-open class SmartCNSegmenter : io.patamon.geocoding.core.Segmenter {
+open class SmartCNSegmenter : Segmenter {
 
     private val ANALYZER = SmartChineseAnalyzer()
 

@@ -10,7 +10,7 @@ import java.io.Serializable
 
 /**
  * Desc: 词条
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by
  * Date: 2017/2/5
  */

@@ -22,14 +22,14 @@ import java.util.*
 
 /**
  * Desc: 基于倒排索引搜索匹配省市区行政区划的访问者
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/12
  */
 open class RegionInterpreterVisitor (
         // 地址持久层对象
-        val persister: io.patamon.geocoding.core.AddressPersister
-) : io.patamon.geocoding.core.TermIndexVisitor {
+        val persister: AddressPersister
+) : TermIndexVisitor {
 
     private var currentLevel = 0
     private var deepMostLevel = 0
@@ -39,9 +39,9 @@ open class RegionInterpreterVisitor (
     private var fullMatchCount = 0
     private var deepMostFullMatchCount = 0
 
-    private val deepMostDivision = io.patamon.geocoding.model.Division()
-    private val curDivision = io.patamon.geocoding.model.Division()
-    private val stack = ArrayDeque<io.patamon.geocoding.index.TermIndexItem>()
+    private val deepMostDivision = Division()
+    private val curDivision = Division()
+    private val stack = ArrayDeque<TermIndexItem>()
 
     companion object {
         private val ambiguousChars = mutableListOf('市', '县', '区', '镇', '乡')
@@ -60,12 +60,12 @@ open class RegionInterpreterVisitor (
      *
      * @return 可以接受返回true, 否则返回false。对于可以接受的索引条目调用 [endVisit] 结束访问
      */
-    override fun visit(entry: io.patamon.geocoding.index.TermIndexEntry, text: String, pos: Int): Boolean {
+    override fun visit(entry: TermIndexEntry, text: String, pos: Int): Boolean {
         // 找到最匹配的 被索引对象. 没有匹配对象，匹配不成功，返回
         val acceptableItem = findAcceptableItem(entry, text, pos) ?: return false
 
         // acceptableItem可能为TermType.Ignore类型，此时其value并不是RegionEntity对象，因此下面region的值可能为null
-        val region = acceptableItem.value as? io.patamon.geocoding.model.RegionEntity
+        val region = acceptableItem.value as? RegionEntity
 
         // 更新当前状态
         stack.push(acceptableItem) // 匹配项压栈
@@ -78,9 +78,9 @@ open class RegionInterpreterVisitor (
         return true
     }
 
-    private fun findAcceptableItem(entry: io.patamon.geocoding.index.TermIndexEntry, text: String, pos: Int): io.patamon.geocoding.index.TermIndexItem? {
+    private fun findAcceptableItem(entry: TermIndexEntry, text: String, pos: Int): TermIndexItem? {
         var mostPriority = -1
-        var acceptableItem: io.patamon.geocoding.index.TermIndexItem? = null
+        var acceptableItem: TermIndexItem? = null
 
         entry.items ?: return null
         // 每个 被索引对象循环，找出最匹配的
@@ -89,7 +89,7 @@ open class RegionInterpreterVisitor (
             if (!isAcceptableItemType(item.type!!)) continue
 
             //省市区中的特殊名称
-            if (item.type == io.patamon.geocoding.index.TermType.Ignore) {
+            if (item.type == TermType.Ignore) {
                 if (acceptableItem == null) {
                     mostPriority = 4
                     acceptableItem = item
@@ -97,7 +97,7 @@ open class RegionInterpreterVisitor (
                 continue
             }
 
-            val region = item.value as io.patamon.geocoding.model.RegionEntity
+            val region = item.value as RegionEntity
             // 从未匹配上任何一个省市区，则从全部被索引对象中找出一个级别最高的
             if (!curDivision.hasProvince()) {
 
@@ -107,8 +107,8 @@ open class RegionInterpreterVisitor (
                     if (region.type == Province
                             || region.type == City
                             || region.type == District
-                            || region.type == io.patamon.geocoding.model.RegionType.Street
-                            || region.type == io.patamon.geocoding.model.RegionType.Town) { // 县区或街道
+                            || region.type == RegionType.Street
+                            || region.type == RegionType.Town) { // 县区或街道
 
                         // 如果是某某路, 街等
                         when (text[pos + 1]) {
@@ -135,7 +135,7 @@ open class RegionInterpreterVisitor (
                 //   错误匹配方式：提取省市区时，将【万子湖村】中的字符【万子湖】匹配成【万子湖乡】，剩下一个【村】。
                 // 2. 广东广州白云区均和街新市镇
                 //   白云区下面有均和街道，街道、乡镇使用别名匹配时，后续字符不能是某些行政区域和道路关键字符
-                if (region.type == io.patamon.geocoding.model.RegionType.Street || region.type == io.patamon.geocoding.model.RegionType.Town) { //街道、乡镇
+                if (region.type == RegionType.Street || region.type == RegionType.Town) { //街道、乡镇
                     when (text[pos + 1]) {
                         '区', '县', '乡', '镇', '村', '街', '路' -> continue@loop
                         '大' -> if (pos + 2 <= text.length - 1) {
@@ -156,7 +156,7 @@ open class RegionInterpreterVisitor (
             if (mostPriority == -1 || mostPriority > 2) {
                 val parent = persister.getRegion(region.parentId)
                 // 2.1 缺地级市
-                if (!curDivision.hasCity() && curDivision.hasProvince() && region.type == io.patamon.geocoding.model.RegionType.District
+                if (!curDivision.hasCity() && curDivision.hasProvince() && region.type == RegionType.District
                         && curDivision.province!!.id == parent!!.parentId) {
                     mostPriority = 2
                     acceptableItem = item
@@ -164,8 +164,8 @@ open class RegionInterpreterVisitor (
                 }
                 // 2.2 缺区县
                 if (!curDivision.hasDistrict() && curDivision.hasCity()
-                        && (region.type == io.patamon.geocoding.model.RegionType.Street || region.type == io.patamon.geocoding.model.RegionType.Town
-                        || region.type == io.patamon.geocoding.model.RegionType.PlatformL4 || region.type == io.patamon.geocoding.model.RegionType.Village)
+                        && (region.type == RegionType.Street || region.type == RegionType.Town
+                        || region.type == RegionType.PlatformL4 || region.type == RegionType.Village)
                         && curDivision.city!!.id == parent!!.parentId) {
                     mostPriority = 2
                     acceptableItem = item
@@ -198,7 +198,7 @@ open class RegionInterpreterVisitor (
                 // 新疆->阿拉尔市
                 // 错误匹配方式：新疆 阿克苏地区 阿拉尔市，会导致在【阿克苏地区】下面无法匹配到【阿拉尔市】
                 // 正确匹配结果：新疆 阿拉尔市
-                if (region.type == io.patamon.geocoding.model.RegionType.CityLevelDistrict
+                if (region.type == RegionType.CityLevelDistrict
                         && curDivision.hasProvince() && curDivision.province!!.id == region.parentId) {
                     mostPriority = 4
                     acceptableItem = item
@@ -206,7 +206,7 @@ open class RegionInterpreterVisitor (
                 }
                 // 4.2 地级市-区县从属关系错误，但区县对应的省份正确，则将使用区县的地级市覆盖已匹配的地级市
                 // 主要是地级市的管辖范围有调整，或者由于外部系统地级市与区县对应关系有调整导致
-                if (region.type == io.patamon.geocoding.model.RegionType.District // 必须是普通区县
+                if (region.type == RegionType.District // 必须是普通区县
                         && curDivision.hasCity() && curDivision.hasProvince()
                         && isFullMatch(entry, region) // 使用的全名匹配
                         && curDivision.city!!.id != region.parentId) {
@@ -220,8 +220,8 @@ open class RegionInterpreterVisitor (
             }
 
             // 5. 街道、乡镇，且不符合上述情况
-            if (region.type == io.patamon.geocoding.model.RegionType.Street || region.type == io.patamon.geocoding.model.RegionType.Town
-                    || region.type == io.patamon.geocoding.model.RegionType.Village || region.type == io.patamon.geocoding.model.RegionType.PlatformL4) {
+            if (region.type == RegionType.Street || region.type == RegionType.Town
+                    || region.type == RegionType.Village || region.type == RegionType.PlatformL4) {
                 if (!curDivision.hasDistrict()) {
                     var parent = persister.getRegion(region.parentId) // parent为区县
                     parent = persister.getRegion(parent!!.parentId) // parent为地级市
@@ -241,7 +241,7 @@ open class RegionInterpreterVisitor (
         return acceptableItem
     }
 
-    private fun isFullMatch(entry: io.patamon.geocoding.index.TermIndexEntry, region: io.patamon.geocoding.model.RegionEntity?): Boolean {
+    private fun isFullMatch(entry: TermIndexEntry, region: RegionEntity?): Boolean {
         if (region == null) return false
         if (entry.key!!.length == region.name.length) return true
         if (region.type == Street && region.name.endsWith("街道") && region.name.length == entry.key!!.length + 1)
@@ -252,10 +252,10 @@ open class RegionInterpreterVisitor (
     /**
      * 索引对象是否是可接受的省市区等类型。
      */
-    private fun isAcceptableItemType(type: io.patamon.geocoding.index.TermType): Boolean {
+    private fun isAcceptableItemType(type: TermType): Boolean {
         when (type) {
-            io.patamon.geocoding.index.TermType.Province, io.patamon.geocoding.index.TermType.City, io.patamon.geocoding.index.TermType.District,
-            io.patamon.geocoding.index.TermType.Street, io.patamon.geocoding.index.TermType.Town, io.patamon.geocoding.index.TermType.Village, io.patamon.geocoding.index.TermType.Ignore -> return true
+            TermType.Province, TermType.City, TermType.District,
+            TermType.Street, TermType.Town, TermType.Village, TermType.Ignore -> return true
             else -> return false
         }
     }
@@ -269,7 +269,7 @@ open class RegionInterpreterVisitor (
             && (curDivision.district!!.parentId == curDivision.city!!.id)
     }
 
-    private fun positioning(acceptedRegion: io.patamon.geocoding.model.RegionEntity?, entry: io.patamon.geocoding.index.TermIndexEntry, text: String, pos: Int): Int {
+    private fun positioning(acceptedRegion: RegionEntity?, entry: TermIndexEntry, text: String, pos: Int): Int {
         if (acceptedRegion == null) return pos
         // 需要调整指针的情况
         // 1. 山东泰安肥城市桃园镇桃园镇山东省泰安市肥城县桃园镇东伏村
@@ -299,7 +299,7 @@ open class RegionInterpreterVisitor (
      * 更新当前已匹配区域对象的状态。
      * @param region
      */
-    private fun updateCurrentDivisionState(region: io.patamon.geocoding.model.RegionEntity?) {
+    private fun updateCurrentDivisionState(region: RegionEntity?) {
         if (region == null) return
         // region为重复项，无需更新状态
         if (region == curDivision.province || region == curDivision.city
@@ -356,23 +356,23 @@ open class RegionInterpreterVisitor (
     /**
      * 结束索引访问
      */
-    override fun endVisit(entry: io.patamon.geocoding.index.TermIndexEntry, text: String, pos: Int) {
+    override fun endVisit(entry: TermIndexEntry, text: String, pos: Int) {
         this.checkDeepMost()
 
         val indexTerm = stack.pop() // 当前访问的索引对象出栈
         currentPos = pos - entry.key!!.length // 恢复当前位置指针
-        val region = indexTerm.value as? io.patamon.geocoding.model.RegionEntity
+        val region = indexTerm.value as? RegionEntity
         if (isFullMatch(entry, region)) fullMatchCount++ //更新全名匹配的数量
-        if (indexTerm.type == io.patamon.geocoding.index.TermType.Ignore) return //如果是忽略项，无需更新当前已匹配的省市区状态
+        if (indexTerm.type == TermType.Ignore) return //如果是忽略项，无需更新当前已匹配的省市区状态
 
         // 扫描一遍stack，找出街道street、乡镇town、村庄village，以及省市区中级别最低的一个least
-        var least: io.patamon.geocoding.model.RegionEntity? = null
-        var street: io.patamon.geocoding.model.RegionEntity? = null
-        var town: io.patamon.geocoding.model.RegionEntity? = null
-        var village: io.patamon.geocoding.model.RegionEntity? = null
+        var least: RegionEntity? = null
+        var street: RegionEntity? = null
+        var town: RegionEntity? = null
+        var village: RegionEntity? = null
         stack.forEach {
-            if (it.type == io.patamon.geocoding.index.TermType.Ignore) return@forEach
-            val r = it.value as io.patamon.geocoding.model.RegionEntity
+            if (it.type == TermType.Ignore) return@forEach
+            val r = it.value as RegionEntity
             when (r.type) {
                 Street, PlatformL4 -> {
                     street = r
@@ -450,7 +450,7 @@ open class RegionInterpreterVisitor (
     /**
      * 获取访问后的对象
      */
-    override fun devision(): io.patamon.geocoding.model.Division {
+    override fun devision(): Division {
         return deepMostDivision
     }
 

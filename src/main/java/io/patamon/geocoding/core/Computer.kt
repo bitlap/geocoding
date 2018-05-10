@@ -6,7 +6,7 @@ import io.patamon.geocoding.similarity.MatchedResult
 
 /**
  * Desc: 相似度算法相关逻辑
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/2/5
  */
@@ -17,7 +17,7 @@ interface Computer {
      * 1. 对text进行分词
      * 2. 对每个部分计算 IDF
      */
-    fun analyze(address: io.patamon.geocoding.model.Address): io.patamon.geocoding.similarity.Document
+    fun analyze(address: Address): Document
 
     /**
      * 计算两个标准地址的相似度
@@ -25,5 +25,5 @@ interface Computer {
      * 2. 为每个Document的Term设置权重
      * 3. 计算两个分词组的余弦相似度
      */
-    fun compute(addr1: io.patamon.geocoding.model.Address?, addr2: io.patamon.geocoding.model.Address?): io.patamon.geocoding.similarity.MatchedResult
+    fun compute(addr1: Address?, addr2: Address?): MatchedResult
 }

@@ -6,22 +6,22 @@ import io.patamon.geocoding.model.RegionType.Town
 
 /**
  * Desc: 行政区规范实体
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/13
  */
 open class Division {
 
     // 省
-    var province: io.patamon.geocoding.model.RegionEntity? = null
+    var province: RegionEntity? = null
     // 市
-    var city: io.patamon.geocoding.model.RegionEntity? = null
+    var city: RegionEntity? = null
     // 区
-    var district: io.patamon.geocoding.model.RegionEntity? = null
+    var district: RegionEntity? = null
     // 街道
-    var street: io.patamon.geocoding.model.RegionEntity? = null
+    var street: RegionEntity? = null
     // 乡镇
-    var town: io.patamon.geocoding.model.RegionEntity? = null
+    var town: RegionEntity? = null
         set(town) {
             town ?: return
             when(town.type) {
@@ -36,7 +36,7 @@ open class Division {
             return if (this.street!!.isTown()) this.street else null
         }
     // 村
-    var village: io.patamon.geocoding.model.RegionEntity? = null
+    var village: RegionEntity? = null
 
 
     fun hasProvince(): Boolean = this.province != null
@@ -49,7 +49,7 @@ open class Division {
     /**
      * 获取最小一级有效行政区域对象。
      */
-    fun leastRegion(): io.patamon.geocoding.model.RegionEntity {
+    fun leastRegion(): RegionEntity {
         if (hasVillage()) return this.village!!
         if (hasTown()) return this.town!!
         if (hasStreet()) return this.street!!

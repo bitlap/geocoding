@@ -7,7 +7,7 @@ import java.util.*
 
 /**
  * Desc: 区域实体类, 标准地址库4级地址(region.dat from Taobao, JD)
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/12
  */
@@ -17,7 +17,7 @@ open class RegionEntity : Serializable {
     var parentId: Long = 0
     var name: String = ""
     var alias = ""
-    var type: io.patamon.geocoding.model.RegionType = io.patamon.geocoding.model.RegionType.Undefined
+    var type: RegionType = RegionType.Undefined
     var zip = ""
     var children: List<RegionEntity>? = null
     var orderedNames: List<String>? = null

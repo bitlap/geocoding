@@ -4,7 +4,7 @@ import org.junit.Test
 
 /**
  * Desc: 测试相似度
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/2/7
  */
@@ -25,13 +25,13 @@ open class TestSimilarity {
         text2 = "山东青岛李沧区延川路绿城城园东区7-2-802"
 
         // 标准化
-        val addr1 = io.patamon.geocoding.Geocoding.normalizing(text1)
-        val addr2 = io.patamon.geocoding.Geocoding.normalizing(text2)
+        val addr1 = Geocoding.normalizing(text1)
+        val addr2 = Geocoding.normalizing(text2)
         println("addr1 >>>> $addr1")
         println(">>>>>>>>>>>>>>>>>")
         println("addr2 >>>> $addr2")
 
-        println("相似度结果分析 >>>>>>>>> " + io.patamon.geocoding.Geocoding.similarityWithResult(addr1, addr2))
+        println("相似度结果分析 >>>>>>>>> " + Geocoding.similarityWithResult(addr1, addr2))
     }
 
     @Test
@@ -41,12 +41,12 @@ open class TestSimilarity {
         val text2 = "湖南省郴州市宜章县梅田镇上寮村2组"
 
         // 标准化
-        val addr2 = io.patamon.geocoding.Geocoding.normalizing(text1)
-        val addr1 = io.patamon.geocoding.Geocoding.normalizing(text2)
+        val addr2 = Geocoding.normalizing(text1)
+        val addr1 = Geocoding.normalizing(text2)
         println("addr1 >>>> $addr1")
         println(">>>>>>>>>>>>>>>>>")
         println("addr2 >>>> $addr2")
 
-        println("相似度结果分析 >>>>>>>>> " + io.patamon.geocoding.Geocoding.similarityWithResult(addr1, addr2))
+        println("相似度结果分析 >>>>>>>>> " + Geocoding.similarityWithResult(addr1, addr2))
     }
 }

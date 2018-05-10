@@ -5,7 +5,7 @@ import io.patamon.geocoding.model.Division
 
 /**
  * Desc: 基于词条倒排索引搜索的访问者
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/12
  */
@@ -22,7 +22,7 @@ interface TermIndexVisitor {
      *
      * @return 可以接受返回true, 否则返回false。对于可以接受的索引条目调用 [endVisit] 结束访问
      */
-    fun visit(entry: io.patamon.geocoding.index.TermIndexEntry, text: String, pos: Int): Boolean
+    fun visit(entry: TermIndexEntry, text: String, pos: Int): Boolean
 
     /**
      * [visit] 接受某个索引项之后当前匹配的指针位置
@@ -32,7 +32,7 @@ interface TermIndexVisitor {
     /**
      * 结束索引访问
      */
-    fun endVisit(entry: io.patamon.geocoding.index.TermIndexEntry, text: String, pos: Int)
+    fun endVisit(entry: TermIndexEntry, text: String, pos: Int)
 
     /**
      * 结束一轮词条匹配。
@@ -47,7 +47,7 @@ interface TermIndexVisitor {
     /**
      * 获取访问后最终匹配结果
      */
-    fun devision(): io.patamon.geocoding.model.Division
+    fun devision(): Division
 
     fun matchCount(): Int
     fun fullMatchCount(): Int

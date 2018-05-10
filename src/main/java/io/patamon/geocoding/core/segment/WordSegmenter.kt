@@ -4,11 +4,11 @@ import io.patamon.geocoding.core.Segmenter
 
 /**
  * Desc: word 分词器 @see https://github.com/ysc/word
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/2/6
  */
-open class WordSegmenter : io.patamon.geocoding.core.Segmenter {
+open class WordSegmenter : Segmenter {
 
     /**
      * 分词方法

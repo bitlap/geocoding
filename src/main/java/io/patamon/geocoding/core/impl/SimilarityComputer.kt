@@ -31,16 +31,16 @@ import io.patamon.geocoding.utils.isNumericChars
  *  IDF: 逆文档词频 Inverse Document Frequency. IDF = log( 语料库文档总数 / ( 包含该词的文档数 + 1 ) ). 分母加1是为了防止分母出现0的情况
  *  TF-IDF: 词条的特征值, TF-IDF = TF * IDF
  *
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/2/5
  */
-open class SimilarityComputer : io.patamon.geocoding.core.Computer {
+open class SimilarityComputer : Computer {
 
-    private val segmenter = io.patamon.geocoding.core.segment.IKAnalyzerSegmenter() // text的分词, 默认 ik 分词器
+    private val segmenter = IKAnalyzerSegmenter() // text的分词, 默认 ik 分词器
 
     // private val simpleSegmenter = SimpleSegmenter() // 暂时用于处理 building 的分词
-    private val simpleSegmenter = io.patamon.geocoding.core.segment.AsciiSegmenter() // 暂时用于处理 building 的分词
+    private val simpleSegmenter = AsciiSegmenter() // 暂时用于处理 building 的分词
 
     // 中文数字字符
     private val NUMBER_CN = arrayOf('一', '二', '三', '四', '五', '六', '七', '八', '九', '０', '１', '２' ,'３' ,'４' ,'５' ,'６' ,'７' ,'８' ,'９')
@@ -57,8 +57,8 @@ open class SimilarityComputer : io.patamon.geocoding.core.Computer {
      * 1. 对text进行分词
      * 2. 对每个部分设置权重
      */
-    override fun analyze(address: io.patamon.geocoding.model.Address): io.patamon.geocoding.similarity.Document {
-        val doc = io.patamon.geocoding.similarity.Document()
+    override fun analyze(address: Address): Document {
+        val doc = Document()
 
         var tokens: List<String> = emptyList()
         // 1. 对 text (地址解析后剩余文本) 进行分词
@@ -66,30 +66,30 @@ open class SimilarityComputer : io.patamon.geocoding.core.Computer {
             tokens = segmenter.segment(address.text!!)
         }
 
-        val terms = arrayListOf<io.patamon.geocoding.similarity.Term>()
+        val terms = arrayListOf<Term>()
         // 2. 生成 term
         // 2.1 town
         val town = if (!address.town.isNullOrBlank()) address.town else address.street
         if (!town.isNullOrBlank()) {
-            doc.town = io.patamon.geocoding.similarity.Term(TermType.Town, town)
+            doc.town = Term(Town, town)
             terms.add(doc.town!!)
         }
         // 2.2 village
         val village = address.village
         if (!village.isNullOrBlank()) {
-            doc.village = io.patamon.geocoding.similarity.Term(TermType.Village, village)
+            doc.village = Term(Village, village)
             terms.add(doc.village!!)
         }
         // 2.3 road
         val road = address.road
         if (!road.isNullOrBlank()) {
-            doc.road = io.patamon.geocoding.similarity.Term(Road, road)
+            doc.road = Term(Road, road)
             terms.add(doc.road!!)
         }
         // 2.4 road num
         val roadNum = address.roadNum
         if (!roadNum.isNullOrBlank()) {
-            val roadNumTerm = io.patamon.geocoding.similarity.Term(RoadNum, roadNum)
+            val roadNumTerm = Term(RoadNum, roadNum)
             doc.roadNum = roadNumTerm
             doc.roadNumValue = translateRoadNum(roadNum)
             roadNumTerm.ref = doc.road
@@ -100,17 +100,17 @@ open class SimilarityComputer : io.patamon.geocoding.core.Computer {
         if (!buildingNum.isNullOrBlank()) {
             // 转换 building串
             translateBuilding(buildingNum).forEach {
-                terms.add(io.patamon.geocoding.similarity.Term(Building, it))
+                terms.add(Term(Building, it))
             }
         }
 
         // 3. 将分词放置到token中
-        val termTexts = terms.map(io.patamon.geocoding.similarity.Term::text)
+        val termTexts = terms.map(Term::text)
         tokens.forEach {
             // 如果 terms 中不包含
             // 并且乡镇道路中不包含
             if (!termTexts.contains(it) && town != it && village != it && road != it) {
-                terms.add(io.patamon.geocoding.similarity.Term(TermType.Text, it))
+                terms.add(Term(Text, it))
             }
         }
 
@@ -128,13 +128,13 @@ open class SimilarityComputer : io.patamon.geocoding.core.Computer {
      * 2. 为每个Document的Term设置权重
      * 3. 计算两个分词组的余弦相似度, 值为0~1，值越大表示相似度越高，返回值为1则表示完全相同
      */
-    override fun compute(addr1: io.patamon.geocoding.model.Address?, addr2: io.patamon.geocoding.model.Address?): io.patamon.geocoding.similarity.MatchedResult {
+    override fun compute(addr1: Address?, addr2: Address?): MatchedResult {
         if (addr1 == null || addr2 == null) {
-            return io.patamon.geocoding.similarity.MatchedResult()
+            return MatchedResult()
         }
         // 如果两个地址不在同一个省市区, 则认为是不相同地址
         if (addr1.provinceId != addr2.provinceId || addr1.cityId != addr2.cityId || addr1.districtId != addr2.districtId) {
-            return io.patamon.geocoding.similarity.MatchedResult()
+            return MatchedResult()
         }
 
         // 为每个address计算词条
@@ -235,7 +235,7 @@ open class SimilarityComputer : io.patamon.geocoding.core.Computer {
      * 获取 termText -> IDF 的映射
      * 简单实现, TODO: 未进行语料库的统计
      */
-    private fun putIdfs(terms: List<io.patamon.geocoding.similarity.Term>) {
+    private fun putIdfs(terms: List<Term>) {
         terms.forEach {
             // 计算 IDF
             val key = it.text
@@ -249,7 +249,7 @@ open class SimilarityComputer : io.patamon.geocoding.core.Computer {
     /**
      * 计算两个文档的余弦相似度
      */
-    private fun computeSimilarity(doc1: io.patamon.geocoding.similarity.Document, doc2: io.patamon.geocoding.similarity.Document): io.patamon.geocoding.similarity.MatchedResult {
+    private fun computeSimilarity(doc1: Document, doc2: Document): MatchedResult {
 
         // 1. 计算Terms中 text类型词条 的匹配率
         var qTextTermCount = 0 // 文档1的Text类型词条数目
@@ -292,7 +292,7 @@ open class SimilarityComputer : io.patamon.geocoding.core.Computer {
         }
 
         // 2. 计算 TF-IDF(非标准) 和 余弦相似度的中间值
-        val result = io.patamon.geocoding.similarity.MatchedResult()
+        val result = MatchedResult()
         result.doc1 = doc1
         result.doc2 = doc2
 
@@ -318,7 +318,7 @@ open class SimilarityComputer : io.patamon.geocoding.core.Computer {
 
             // 计算相似度
             if (dterm != null) {
-                val matchedTerm = io.patamon.geocoding.similarity.MatchedTerm(dterm)
+                val matchedTerm = MatchedTerm(dterm)
                 matchedTerm.boost = dboost
                 matchedTerm.tfidf = d_TF_IDF
                 if (Text == dterm.type) {
@@ -350,7 +350,7 @@ open class SimilarityComputer : io.patamon.geocoding.core.Computer {
      *  > true 则计算 [ddoc] 的权重, 此时 [qdoc], [qterm], [ddoc], [dterm] 不为空
      *  > false 则计算 [qdoc] 的权重, 此时 [qdoc], [qterm], [ddoc] 不为空, [dterm] 为空
      */
-    private fun getBoostValue(forDoc: Boolean, qdoc: io.patamon.geocoding.similarity.Document, qterm: io.patamon.geocoding.similarity.Term, ddoc: io.patamon.geocoding.similarity.Document, dterm: io.patamon.geocoding.similarity.Term?): Double {
+    private fun getBoostValue(forDoc: Boolean, qdoc: Document, qterm: Term, ddoc: Document, dterm: Term?): Double {
 
         val termType = if (forDoc) dterm!!.type else qterm.type
         // 权重值

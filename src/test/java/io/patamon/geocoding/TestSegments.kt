@@ -1,19 +1,23 @@
 package io.patamon.geocoding
 
+import io.patamon.geocoding.core.segment.IKAnalyzerSegmenter
+import io.patamon.geocoding.core.segment.SimpleSegmenter
+import io.patamon.geocoding.core.segment.SmartCNSegmenter
+import io.patamon.geocoding.core.segment.WordSegmenter
 import org.junit.Test
 
 /**
  * Desc: 测试 segments
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/2/6
  */
 class TestSegments {
 
-    private val simple = io.patamon.geocoding.core.segment.SimpleSegmenter()
-    private val smart = io.patamon.geocoding.core.segment.SmartCNSegmenter()
-    private val word = io.patamon.geocoding.core.segment.WordSegmenter()
-    private val ik = io.patamon.geocoding.core.segment.IKAnalyzerSegmenter()
+    private val simple = SimpleSegmenter()
+    private val smart = SmartCNSegmenter()
+    private val word = WordSegmenter()
+    private val ik = IKAnalyzerSegmenter()
 
     @Test
     fun test_segments() {

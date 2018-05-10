@@ -4,7 +4,7 @@ import java.io.Serializable
 
 /**
  * Desc: address 实体类
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/18
  */
@@ -39,7 +39,7 @@ open class Address: Serializable {
 
     companion object {
         // 构建一个Address对象
-        fun build(entity: io.patamon.geocoding.model.AddressEntity?): Address? {
+        fun build(entity: AddressEntity?): Address? {
             if (entity == null ||!entity.hasProvince()) return null
             val address = Address()
             address.provinceId = entity.province?.id

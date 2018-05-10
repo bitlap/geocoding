@@ -5,11 +5,11 @@ import io.patamon.geocoding.utils.take
 
 /**
  * Desc: 简单的分词, 直接按单个字符切分，连续出现的数字、英文字母会作为一个词条
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/2/6
  */
-open class SimpleSegmenter : io.patamon.geocoding.core.Segmenter {
+open class SimpleSegmenter : Segmenter {
 
     /**
      * 分词方法

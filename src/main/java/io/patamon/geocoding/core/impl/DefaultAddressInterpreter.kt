@@ -1,8 +1,11 @@
 package io.patamon.geocoding.core.impl
 
+import io.patamon.geocoding.core.AddressInterpreter
 import io.patamon.geocoding.core.Context
+import io.patamon.geocoding.core.Context.getVisitor
 import io.patamon.geocoding.core.TermIndexVisitor
 import io.patamon.geocoding.index.TermIndexBuilder
+import io.patamon.geocoding.index.TermType
 import io.patamon.geocoding.model.AddressEntity
 import io.patamon.geocoding.model.RegionEntity
 import io.patamon.geocoding.utils.head
@@ -15,11 +18,11 @@ import java.util.regex.Pattern
 /**
  * Desc: 地址解析操作
  *      从地址文本中解析出省、市、区、街道、乡镇、道路等地址组成部分
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/17
  */
-open class DefaultAddressInterpreter : io.patamon.geocoding.core.AddressInterpreter {
+open class DefaultAddressInterpreter : AddressInterpreter {
 
     private var indexBuilder: TermIndexBuilder? = null
     private val ignoringRegionNames = mutableListOf(
@@ -199,7 +202,7 @@ open class DefaultAddressInterpreter : io.patamon.geocoding.core.AddressInterpre
      * 将`脏`地址进行标准化处理, 解析成 [AddressEntity]
      */
     override fun interpret(address: String?): AddressEntity? {
-        return interpret(address, io.patamon.geocoding.core.Context.getVisitor())
+        return interpret(address, getVisitor())
     }
 
     private fun interpret(address: String?, visitor: TermIndexVisitor): AddressEntity? {
@@ -590,7 +593,7 @@ open class DefaultAddressInterpreter : io.patamon.geocoding.core.AddressInterpre
         val items = indexBuilder!!.fullMatch(town)
         if (items != null) {
             for (item in items) {
-                if (item.type != io.patamon.geocoding.index.TermType.Town && item.type != io.patamon.geocoding.index.TermType.Street && item.type != io.patamon.geocoding.index.TermType.Village)
+                if (item.type != TermType.Town && item.type != TermType.Street && item.type != TermType.Village)
                     continue
                 val region = item.value as RegionEntity
                 if (region.parentId == district.id) return 0

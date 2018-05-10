@@ -5,7 +5,7 @@ import java.sql.DriverManager
 
 /**
  * Desc: 测试地址标准化
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/18
  */
@@ -43,7 +43,7 @@ class TestNormalizing {
         add = "辽宁大连甘井子区辽宁, 大连, 甘井子区, 泡崖街玉境路26号3—2—1" // fix字符 —
         add = "绍兴路59号速递易" // fix 绍兴路匹配上绍兴市的情况
         add = "山东德州德城区宋官屯街道开发区段庄村" // fix 开发区的影响
-        val address = io.patamon.geocoding.Geocoding.normalizing(add)
+        val address = Geocoding.normalizing(add)
         println(address)
     }
 

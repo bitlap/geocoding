@@ -11,31 +11,31 @@ import java.util.zip.GZIPInputStream
 /**
  * Desc: 默认 [RegionEntity] 获取的缓存类
  *     默认从 region.dat 中获取
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/12
  */
-open class DefaultRegoinCache : io.patamon.geocoding.core.RegionCache {
+open class DefaultRegoinCache : RegionCache {
 
-    private var regions: io.patamon.geocoding.model.RegionEntity? = null
-    private val REGION_CACHE = hashMapOf<Long, io.patamon.geocoding.model.RegionEntity>()
+    private var regions: RegionEntity? = null
+    private val REGION_CACHE = hashMapOf<Long, RegionEntity>()
 
     init {
         // 加载区域数据
         if (regions == null) {
-            regions = Gson().fromJson(decode(String(this.javaClass.classLoader.getResourceAsStream("core/region.dat").readBytes())), io.patamon.geocoding.model.RegionEntity::class.java)
+            regions = Gson().fromJson(decode(String(this.javaClass.classLoader.getResourceAsStream("core/region.dat").readBytes())), RegionEntity::class.java)
         }
         // 加载cache
         REGION_CACHE.put(regions!!.id, regions!!)
         loadChildsInCache(regions)
     }
 
-    private fun loadChildsInCache(parent: io.patamon.geocoding.model.RegionEntity?) {
+    private fun loadChildsInCache(parent: RegionEntity?) {
         //已经到最底层，结束
-        if (parent == null || parent.type == io.patamon.geocoding.model.RegionType.Street ||
-                parent.type == io.patamon.geocoding.model.RegionType.Village ||
-                parent.type == io.patamon.geocoding.model.RegionType.PlatformL4 ||
-                parent.type == io.patamon.geocoding.model.RegionType.Town) return
+        if (parent == null || parent.type == RegionType.Street ||
+                parent.type == RegionType.Village ||
+                parent.type == RegionType.PlatformL4 ||
+                parent.type == RegionType.Town) return
 
         // 递归children
         parent.children?.forEach {
@@ -54,7 +54,7 @@ open class DefaultRegoinCache : io.patamon.geocoding.core.RegionCache {
     /**
      * 加载全部区域列表，按照行政区域划分构建树状结构关系
      */
-    override fun get(): io.patamon.geocoding.model.RegionEntity {
+    override fun get(): RegionEntity {
         if (regions == null) throw IllegalArgumentException("行政规划区域数据加载失败!")
         return regions!!
     }
@@ -62,7 +62,7 @@ open class DefaultRegoinCache : io.patamon.geocoding.core.RegionCache {
     /**
      * 加载区域map结构, key是区域id, 值是区域实体
      */
-    override fun getCache(): Map<Long, io.patamon.geocoding.model.RegionEntity> {
+    override fun getCache(): Map<Long, RegionEntity> {
         return REGION_CACHE
     }
 

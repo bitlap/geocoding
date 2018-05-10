@@ -2,7 +2,7 @@ package io.patamon.geocoding.utils
 
 /**
  * Desc: String 一些帮助类
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/17
  */

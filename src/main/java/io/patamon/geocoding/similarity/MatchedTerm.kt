@@ -4,14 +4,14 @@ import java.io.Serializable
 
 /**
  * Desc: 匹配的词条信息
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/2/7
  */
 open class MatchedTerm : Serializable {
 
     // 匹配的词条
-    var term: io.patamon.geocoding.similarity.Term? = null
+    var term: Term? = null
 
     // 匹配率
     var coord: Double = 0.0
@@ -25,7 +25,7 @@ open class MatchedTerm : Serializable {
     // 特征值 TF-IDF
     var tfidf: Double = 0.0
 
-    constructor(term: io.patamon.geocoding.similarity.Term) {
+    constructor(term: Term) {
         this.term = term
     }
 }

@@ -5,7 +5,7 @@ import java.util.*
 
 /**
  * Desc: 索引条目
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/12
  */
@@ -13,12 +13,12 @@ open class TermIndexEntry {
     // 条目的key
     var key: String? = null
     // 每个条目下的所有索引对象
-    var items: ArrayList<io.patamon.geocoding.index.TermIndexItem>? = null
+    var items: ArrayList<TermIndexItem>? = null
     // 子条目
     var children: HashMap<Char, TermIndexEntry>? = null
 
 
-    fun addItem(item: io.patamon.geocoding.index.TermIndexItem): TermIndexEntry {
+    fun addItem(item: TermIndexItem): TermIndexEntry {
         if (this.items == null) {
             this.items = arrayListOf()
         }
@@ -30,7 +30,7 @@ open class TermIndexEntry {
     /**
      * 初始化倒排索引
      */
-    fun buildIndex(text: String?, pos: Int, item: io.patamon.geocoding.index.TermIndexItem) {
+    fun buildIndex(text: String?, pos: Int, item: TermIndexItem) {
         if (text.isNullOrBlank() || pos < 0 || pos >=text!!.length) {
             return
         }

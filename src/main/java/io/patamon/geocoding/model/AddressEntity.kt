@@ -4,11 +4,11 @@ import java.io.Serializable
 
 /**
  * Desc: 标准地址实体类
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/1/17
  */
-open class AddressEntity constructor() : io.patamon.geocoding.model.Division(), Serializable {
+open class AddressEntity constructor() : Division(), Serializable {
 
     /**
      * 解析地址后剩余的地址

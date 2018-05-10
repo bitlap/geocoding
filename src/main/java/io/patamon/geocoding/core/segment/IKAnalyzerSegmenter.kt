@@ -7,11 +7,11 @@ import java.io.StringReader
 
 /**
  * Desc: ik 分词器
- * Mail: chk@terminus.io
+ * Mail: chk19940609@gmail.com
  * Created by IceMimosa
  * Date: 2017/2/12
  */
-class IKAnalyzerSegmenter : io.patamon.geocoding.core.Segmenter {
+class IKAnalyzerSegmenter : Segmenter {
 
     /**
      * 分词方法
