@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.terminus.bigdata</groupId>
+    <groupId>io.patamon.geocoding</groupId>
     <artifactId>geocoding</artifactId>
     <version>2.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <kotlin.version>1.1.0</kotlin.version>
+        <kotlin.version>1.2.40</kotlin.version>
         <lucene.version>6.4.0</lucene.version>
         <word.version>1.3</word.version>
         <gson.version>2.8.0</gson.version>
