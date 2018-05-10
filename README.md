@@ -102,13 +102,9 @@ Address(
 5. 对两个结果集使用**余弦相似度算法**计算相似度
 
 
-
-
-
-
-
-
+项目参考[address-semantic-search][4]，简化了流程，修复了各种不规则错误，使得使用更加方便。
 
 [1]:https://lsp.wuliu.taobao.com/locationservice/addr/output_address_town.do
 [2]:http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2015/index.html
 [3]:https://github.com/kakuilan/china_area_mysql
+[4]:https://github.com/liuzhibin-cn/address-semantic-search
