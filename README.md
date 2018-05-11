@@ -5,6 +5,26 @@
  * 地址标准库
  * 地址标准化
  * 相似度计算
+
+## pom
+ 
+```xml
+<dependencies>
+    <dependency>
+        <groupId>io.patamon.jesque</groupId>
+        <artifactId>spring-boot-starter-jesque</artifactId>
+        <version>1.0</version>
+    </dependency>
+</dependencies>
+
+<repositories>
+    <repository>
+        <id>patamon.release.repository</id>
+        <name>github release repository</name>
+        <url>https://raw.github.com/icemimosa/maven/release/</url>
+    </repository>
+</repositories>
+```
  
 # 1. 数据测试
 
