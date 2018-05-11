@@ -11,8 +11,8 @@
 ```xml
 <dependencies>
     <dependency>
-        <groupId>io.patamon.jesque</groupId>
-        <artifactId>spring-boot-starter-jesque</artifactId>
+        <groupId>io.patamon.geocoding</groupId>
+        <artifactId>geocoding</artifactId>
         <version>1.0</version>
     </dependency>
 </dependencies>
