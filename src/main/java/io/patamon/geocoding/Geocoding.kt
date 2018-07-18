@@ -17,6 +17,7 @@ object Geocoding {
     /**
      * 地址的标准化, 将不规范的地址清洗成标准的地址格式
      */
+    @JvmStatic
     fun normalizing(address: String): Address? {
         return build(Context.getInterpreter().interpret(address))
     }
@@ -24,10 +25,12 @@ object Geocoding {
     /**
      * 将地址进行切分
      */
+    @JvmStatic
     fun analyze(address: String): Document? {
         val addr = normalizing(address) ?: return null
         return Context.getComputer().analyze(addr)
     }
+    @JvmStatic
     fun analyze(address: Address?): Document? {
         address ?: return null
         return Context.getComputer().analyze(address)
@@ -36,10 +39,12 @@ object Geocoding {
     /**
      * 地址的相似度计算
      */
+    @JvmStatic
     fun similarity(addr1: String, addr2: String): Double {
         val compute = Context.getComputer().compute(normalizing(addr1), normalizing(addr2))
         return compute.similarity
     }
+    @JvmStatic
     fun similarity(addr1: Address?, addr2: Address?): Double {
         val compute = Context.getComputer().compute(addr1, addr2)
         return compute.similarity
@@ -48,9 +53,11 @@ object Geocoding {
     /**
      * 地址相似度计算, 包含匹配的所有结果
      */
+    @JvmStatic
     fun similarityWithResult(addr1: String, addr2: String): MatchedResult {
         return Context.getComputer().compute(normalizing(addr1), normalizing(addr2))
     }
+    @JvmStatic
     fun similarityWithResult(addr1: Address?, addr2: Address?): MatchedResult {
         return Context.getComputer().compute(addr1, addr2)
     }
