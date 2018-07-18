@@ -51,6 +51,7 @@ fun String.take(begin: Int, end: Int): String {
 /**
  * 删除数组中对应的字符
  */
+@JvmOverloads
 fun String.remove(array: CharArray, exclude: String = ""): String {
     if (this.isNullOrBlank() || array.isEmpty()) return this
     // 去除字符
