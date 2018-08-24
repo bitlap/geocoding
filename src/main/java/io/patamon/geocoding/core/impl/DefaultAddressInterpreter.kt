@@ -88,10 +88,16 @@ open class DefaultAddressInterpreter : AddressInterpreter {
         private val BRACKET_PATTERN = Pattern.compile(
                 "(?<bracket>([\\(（\\{\\<〈\\[【「][^\\)）\\}\\>〉\\]】」]*[\\)）\\}\\>〉\\]】」]))"
         )
+
         // 道路信息
         private val P_ROAD = Pattern.compile(
                 "^(?<road>([\u4e00-\u9fa5]{2,6}(路|街坊|街|道|大街|大道)))(?<ex>[甲乙丙丁])?(?<roadnum>[0-9０１２３４５６７８９一二三四五六七八九十]+(号院|号楼|号大院|号|號|巷|弄|院|区|条|\\#院|\\#))?"
         )
+        // 道路中未匹配到的building信息
+        private val P_ROAD_BUILDING = Pattern.compile(
+                "[0-9A-Z一二三四五六七八九十]+(栋|橦|幢|座|号楼|号|\\#楼?)"
+        )
+
         // 村信息
         private val P_TOWN1 = Pattern.compile("^((?<z>[\u4e00-\u9fa5]{2,2}(镇|乡))(?<c>[\u4e00-\u9fa5]{1,3}村)?)")
         private val P_TOWN2 = Pattern.compile("^((?<z>[\u4e00-\u9fa5]{1,3}镇)?(?<x>[\u4e00-\u9fa5]{1,3}乡)?(?<c>[\u4e00-\u9fa5]{1,3}村(?!(村|委|公路|(东|西|南|北)?(大街|大道|路|街))))?)")
@@ -472,6 +478,10 @@ open class DefaultAddressInterpreter : AddressInterpreter {
                 entity.roadNum = roadNum
                 entity.text = leftText
             }
+            // 修复road中存在building的问题
+            if (entity.buildingNum.isNullOrBlank()) {
+                fixRoadBuilding(entity)
+            }
             return true
         }
         return false
@@ -487,6 +497,19 @@ open class DefaultAddressInterpreter : AddressInterpreter {
             return first
         }
         return road
+    }
+
+    // 修复road中存在 xx号楼 的问题
+    private fun fixRoadBuilding(entity: AddressEntity): Boolean {
+        if (entity.text.isNullOrBlank()) return false
+        val matcher = P_ROAD_BUILDING.matcher(entity.text)
+        // 最开始匹配, 先这样处理
+        if (matcher.find() && matcher.start() == 0) {
+            entity.buildingNum = entity.text!!.take(matcher.start(), matcher.end() - 1)
+            entity.text = entity.text.head(matcher.start()) + entity.text!!.take(matcher.end())
+            return true
+        }
+        return false
     }
 
     // 提取农村信息

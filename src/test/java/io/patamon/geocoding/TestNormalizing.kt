@@ -43,6 +43,7 @@ class TestNormalizing {
         add = "辽宁大连甘井子区辽宁, 大连, 甘井子区, 泡崖街玉境路26号3—2—1" // fix字符 —
         add = "绍兴路59号速递易" // fix 绍兴路匹配上绍兴市的情况
         add = "山东德州德城区宋官屯街道开发区段庄村" // fix 开发区的影响
+        add = "北京市西城区新康街2号院1号楼北侧楼房" // fix 只有 1号楼 的情况
         val address = Geocoding.normalizing(add)
         println(address)
     }
