@@ -489,7 +489,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
 
     // 修复重复出现的情况
     private fun fixRoad(road: String): String {
-        if (road.isNullOrBlank() || road.length % 2 == 1) return road
+        if (road.isBlank() || road.length % 2 == 1) return road
         // 从中间截取
         val first = road.substring(0, road.length / 2)
         val second = road.substring(road.length / 2)

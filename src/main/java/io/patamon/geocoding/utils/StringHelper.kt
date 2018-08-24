@@ -31,16 +31,19 @@ fun String?.tail(length: Int): String? {
 /**
  * 提取子串, 优化边界判断
  * [begin]: 开始位置, 包括
- * [end]: 结束位置, 包括
  */
 fun String.take(begin: Int): String {
-    if (this.isNullOrBlank() || begin <= 0) return this
+    if (this.isBlank() || begin <= 0) return this
     if (begin > this.length - 1) return ""
     return this.substring(begin)
 }
-
+/**
+ * 提取子串, 优化边界判断
+ * [begin]: 开始位置, 包括
+ * [end]: 结束位置, 包括
+ */
 fun String.take(begin: Int, end: Int): String {
-    if (this.isNullOrBlank()) return this
+    if (this.isBlank()) return this
     val s = if (begin <= 0) 0 else begin
     val e = if (end >= this.length - 1) this.length - 1 else end
     if (s > e) return ""
@@ -53,7 +56,7 @@ fun String.take(begin: Int, end: Int): String {
  */
 @JvmOverloads
 fun String.remove(array: CharArray, exclude: String = ""): String {
-    if (this.isNullOrBlank() || array.isEmpty()) return this
+    if (this.isBlank() || array.isEmpty()) return this
     // 去除字符
     val sb = StringBuilder(this.length)
     var remove = false
@@ -72,7 +75,7 @@ fun String.remove(array: CharArray, exclude: String = ""): String {
  * [length] : 重复出现的次数
  */
 fun String.removeRepeatNum(length: Int): String {
-    if (this.isNullOrBlank() || this.length < length) return this
+    if (this.isBlank() || this.length < length) return this
     val sb = StringBuilder(this.length)
     var count = 0
     this.forEachIndexed { i, c ->

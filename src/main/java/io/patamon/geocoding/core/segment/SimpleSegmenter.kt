@@ -23,12 +23,12 @@ open class SimpleSegmenter : Segmenter {
      */
     protected fun segment(text: String, remove: Boolean): List<String> {
         val segs = arrayListOf<String>()
-        if (text.isNullOrBlank()) {
+        if (text.isBlank()) {
             return segs
         }
         var digitNum = 0
         var ansiCharNum = 0
-        for (i in 0 .. text.length - 1) {
+        for (i in 0 until text.length) {
             val c = text[i]
             // 是否是数字
             if (c in '0'..'9') {

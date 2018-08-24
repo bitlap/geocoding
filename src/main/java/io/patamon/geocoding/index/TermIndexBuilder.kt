@@ -88,19 +88,18 @@ open class TermIndexBuilder(
     }
 
     // 获取 region 的类型
-    private fun convertRegionType(region: RegionEntity): TermType {
+    private fun convertRegionType(region: RegionEntity): TermType =
         when (region.type) {
-            Country -> return TermType.Country
-            Province, ProvinceLevelCity1 -> return TermType.Province
-            City, ProvinceLevelCity2 -> return TermType.City
-            District, CityLevelDistrict -> return TermType.District
-            PlatformL4 -> return TermType.Street
-            Town -> return TermType.Town
-            Village -> return TermType.Village
-            Street -> return if (region.isTown()) TermType.Town else TermType.Street
+            Country -> TermType.Country
+            Province, ProvinceLevelCity1 -> TermType.Province
+            City, ProvinceLevelCity2 -> TermType.City
+            District, CityLevelDistrict -> TermType.District
+            PlatformL4 -> TermType.Street
+            Town -> TermType.Town
+            Village -> TermType.Village
+            Street -> if (region.isTown()) TermType.Town else TermType.Street
+            else -> TermType.Undefined
         }
-        return TermType.Undefined
-    }
 
     /**
      * 深度优先匹配词条
@@ -114,6 +113,7 @@ open class TermIndexBuilder(
         }
         this.deepMostQuery(text, p, visitor)
     }
+
     fun deepMostQuery(text: String?, pos: Int, visitor: TermIndexVisitor) {
         if (text == null || text.isEmpty()) return
         // 开始匹配
@@ -121,6 +121,7 @@ open class TermIndexBuilder(
         this.deepFirstQueryRound(text, pos, indexRoot.children ?: emptyMap(), visitor)
         visitor.endRound()
     }
+
     private fun deepFirstQueryRound(text: String, pos: Int, entries: Map<Char, TermIndexEntry>, visitor: TermIndexVisitor) {
         // 获取索引对象
         if (pos > text.length - 1) return
@@ -145,6 +146,7 @@ open class TermIndexBuilder(
         if (text == null || text.isEmpty()) return null
         return fullMatch(text, 0, indexRoot.children)
     }
+
     private fun fullMatch(text: String, pos: Int, entries: Map<Char, TermIndexEntry>?): List<TermIndexItem>? {
         if (entries == null) return null
         val c = text[pos]

@@ -32,9 +32,9 @@ open class RegionEntity : Serializable {
     // 创建排序后的别名, 并按照长度排序
     private fun buildOrderedNames(): List<String> {
         val fields = mutableListOf(this.name)
-        if (this.alias.isNullOrBlank()) return fields
+        if (this.alias.isBlank()) return fields
         this.alias.split(";").forEach {
-            if (!it.isNullOrBlank()) {
+            if (!it.isBlank()) {
                 fields.add(it)
             }
         }
@@ -52,7 +52,7 @@ open class RegionEntity : Serializable {
         when (this.type) {
             Town -> return true
             Street -> {
-                if (this.name.isNullOrBlank()) return false
+                if (this.name.isBlank()) return false
                 return this.name.length <= 4 && (this.name.last() == '镇' || this.name[this.name.lastIndex] == '乡')
             }
             else -> return false
