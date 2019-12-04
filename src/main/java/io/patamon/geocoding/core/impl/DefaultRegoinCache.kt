@@ -4,8 +4,8 @@ import com.google.gson.Gson
 import io.patamon.geocoding.core.RegionCache
 import io.patamon.geocoding.model.RegionEntity
 import io.patamon.geocoding.model.RegionType
-import sun.misc.BASE64Decoder
 import java.io.ByteArrayInputStream
+import java.util.*
 import java.util.zip.GZIPInputStream
 
 /**
@@ -48,7 +48,7 @@ open class DefaultRegoinCache : RegionCache {
      * 解压缩数据
      */
     private fun decode(dat: String): String {
-        return String(GZIPInputStream(ByteArrayInputStream(BASE64Decoder().decodeBuffer(dat))).readBytes())
+        return String(GZIPInputStream(ByteArrayInputStream(Base64.getMimeDecoder().decode(dat))).readBytes())
     }
 
     /**
