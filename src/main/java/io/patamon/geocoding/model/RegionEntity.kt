@@ -19,7 +19,7 @@ open class RegionEntity : Serializable {
     var alias = ""
     var type: RegionType = RegionType.Undefined
     var zip = ""
-    var children: List<RegionEntity>? = null
+    var children: ArrayList<RegionEntity>? = null
     var orderedNames: List<String>? = null
         get() {
             synchronized(this) {

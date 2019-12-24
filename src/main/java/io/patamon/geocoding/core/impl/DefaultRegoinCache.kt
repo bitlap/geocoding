@@ -27,11 +27,11 @@ open class DefaultRegoinCache : RegionCache {
         }
         // 加载cache
         REGION_CACHE.put(regions!!.id, regions!!)
-        loadChildsInCache(regions)
+        loadChildrenInCache(regions)
     }
 
-    private fun loadChildsInCache(parent: RegionEntity?) {
-        //已经到最底层，结束
+    private fun loadChildrenInCache(parent: RegionEntity?) {
+        // 已经到最底层，结束
         if (parent == null || parent.type == RegionType.Street ||
                 parent.type == RegionType.Village ||
                 parent.type == RegionType.PlatformL4 ||
@@ -40,7 +40,7 @@ open class DefaultRegoinCache : RegionCache {
         // 递归children
         parent.children?.forEach {
             REGION_CACHE.put(it.id, it)
-            this.loadChildsInCache(it)
+            this.loadChildrenInCache(it)
         }
     }
 
@@ -66,4 +66,12 @@ open class DefaultRegoinCache : RegionCache {
         return REGION_CACHE
     }
 
+    /**
+     * 新增一个region信息
+     */
+    override fun addRegionEntity(entity: RegionEntity) {
+        this.loadChildrenInCache(entity)
+        this.REGION_CACHE[entity.id] = entity
+        this.REGION_CACHE[entity.parentId]?.children?.add(entity)
+    }
 }

@@ -279,7 +279,7 @@ open class RegionInterpreterVisitor (
                 && !isFullMatch(entry, acceptedRegion) && pos + 1 <= text.length - 1) {
             val c = text[pos + 1]
             if (ambiguousChars.contains(c)) { //后续跟着特殊字符
-                for (child in acceptedRegion.children ?: emptyList()) {
+                for (child in acceptedRegion.children ?: arrayListOf()) {
                     if (child.name[0] == c) return pos
                 }
                 return pos + 1

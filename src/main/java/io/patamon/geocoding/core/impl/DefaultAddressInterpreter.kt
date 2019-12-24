@@ -628,5 +628,12 @@ open class DefaultAddressInterpreter : AddressInterpreter {
 
         return 1
     }
+
+    /**
+     * 获取 [TermIndexBuilder]
+     */
+    override fun getTermIndexBuilder(): TermIndexBuilder {
+        return this.indexBuilder!!
+    }
 }
 

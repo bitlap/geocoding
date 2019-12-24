@@ -34,7 +34,7 @@ open class TermIndexBuilder(
     }
 
     // 为行政区划(标准地址库建立倒排索引)
-    private fun indexRegions(regions: List<RegionEntity>) {
+    fun indexRegions(regions: List<RegionEntity>) { synchronized(this) {
         if (regions.isEmpty()) return
         for (region in regions) {
             val indexItem = TermIndexItem(convertRegionType(region), region)
@@ -75,17 +75,17 @@ open class TermIndexBuilder(
                 this.indexRegions(region.children!!)
             }
         }
-    }
+    } }
 
     /**
      * 为忽略列表建立倒排索引
      */
-    private fun indexIgnorings(ignoringRegionNames: List<String>) {
+    fun indexIgnorings(ignoringRegionNames: List<String>) { synchronized(this) {
         if (ignoringRegionNames.isEmpty()) return
         for (ignore in ignoringRegionNames) {
             indexRoot.buildIndex(ignore, 0, TermIndexItem(TermType.Ignore, null))
         }
-    }
+    } }
 
     // 获取 region 的类型
     private fun convertRegionType(region: RegionEntity): TermType =

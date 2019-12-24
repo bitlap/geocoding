@@ -1,5 +1,6 @@
 package io.patamon.geocoding.core
 
+import io.patamon.geocoding.index.TermIndexBuilder
 import io.patamon.geocoding.model.AddressEntity
 
 /**
@@ -17,4 +18,8 @@ interface AddressInterpreter {
     fun interpret(address: String?): AddressEntity?
 
 
+    /**
+     * 获取 [TermIndexBuilder]
+     */
+    fun getTermIndexBuilder(): TermIndexBuilder
 }

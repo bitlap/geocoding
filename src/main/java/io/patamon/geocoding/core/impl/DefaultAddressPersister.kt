@@ -13,21 +13,28 @@ import io.patamon.geocoding.model.RegionEntity
  */
 open class DefaultAddressPersister (
         // 行政规划准地址库
-        private val regoinCache: RegionCache
+        private val regionCache: RegionCache
 ) : AddressPersister {
 
     /**
      * 获取行政规划地址树状结构关系
      */
     override fun getRootRegion(): RegionEntity {
-        return regoinCache.get()
+        return regionCache.get()
     }
 
     /**
      * 根据id获取
      */
     override fun getRegion(id: Long): RegionEntity? {
-        return regoinCache.getCache()[id]
+        return regionCache.getCache()[id]
+    }
+
+    /**
+     * 新增一个region信息
+     */
+    override fun addRegionEntity(entity: RegionEntity) {
+        regionCache.addRegionEntity(entity)
     }
 
 }

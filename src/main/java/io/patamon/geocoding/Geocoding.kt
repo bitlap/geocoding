@@ -3,6 +3,8 @@ package io.patamon.geocoding;
 import io.patamon.geocoding.core.Context
 import io.patamon.geocoding.model.Address
 import io.patamon.geocoding.model.Address.Companion.build
+import io.patamon.geocoding.model.RegionEntity
+import io.patamon.geocoding.model.RegionType
 import io.patamon.geocoding.similarity.Document
 import io.patamon.geocoding.similarity.MatchedResult
 
@@ -62,4 +64,36 @@ object Geocoding {
         return Context.getComputer().compute(addr1, addr2)
     }
 
+    @JvmStatic
+    fun getContext(): Context = Context
+
+    /**
+     * 设置自定义地址
+     *
+     * @param id          地址的ID
+     * @param parentId    地址的父ID, 必须存在
+     * @param name        地址的名称
+     * @param type        地址类型, [RegionType]
+     * @param alias       地址的别名
+     */
+    @JvmStatic
+    fun addRegionEntry(id: Long, parentId: Long, name: String, type: RegionType = RegionType.Undefined, alias: String = "") {
+        val persister = this.getContext().getPersister()
+        persister.getRegion(parentId) ?: throw IllegalArgumentException("Parent Address is not exists, parentId is $parentId")
+        if (name.isBlank()) {
+            throw IllegalArgumentException("name should not be blank.")
+        }
+        // 构建 region 对象
+        val region = RegionEntity()
+        region.id = id
+        region.parentId = parentId
+        region.name = name
+        region.alias = alias
+        region.type = type
+        // 1. Add to cache (id -> Region)
+        persister.addRegionEntity(region)
+        // 2. Build term index
+        val indexBuilder = this.getContext().getInterpreter().getTermIndexBuilder()
+        indexBuilder.indexRegions(listOf(region))
+    }
 }

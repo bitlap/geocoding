@@ -20,4 +20,9 @@ interface AddressPersister {
      * 根据id获取
      */
     fun getRegion(id: Long): RegionEntity?
+
+    /**
+     * 新增一个region信息
+     */
+    fun addRegionEntity(entity: RegionEntity)
 }

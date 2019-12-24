@@ -21,4 +21,9 @@ interface RegionCache {
      * 加载区域map结构, key是区域id, 值是区域实体
      */
     fun getCache(): Map<Long, RegionEntity>
+
+    /**
+     * 新增一个region信息
+     */
+    fun addRegionEntity(entity: RegionEntity)
 }

@@ -13,7 +13,7 @@
     <dependency>
         <groupId>io.patamon.geocoding</groupId>
         <artifactId>geocoding</artifactId>
-        <version>1.1.2</version>
+        <version>1.1.3</version>
     </dependency>
 </dependencies>
 
@@ -25,6 +25,11 @@
     </repository>
 </repositories>
 ```
+
+## Release Log
+
+* 1.1.3
+  * 新增自定义地址设置
  
 # 1. 数据测试
 
@@ -84,7 +89,7 @@ Address(
 
 > 注: 如果对text的结果不是很满意, 比如出现重复或不准确, 可以通过分词的手段解决
 
-# 1.2 相似度
+## 1.2 相似度
 
 ```java
 >> 输入:
@@ -101,6 +106,32 @@ Address(
 >> 输出:
   0.0
 ```
+
+## 1.3 自定义地址设置
+
+```kotlin
+// 100000000000 代表中国的ID
+Geocoding.addRegionEntry(88888888, 100000000000, "尼玛省", RegionType.Province)
+Geocoding.addRegionEntry(8888888, 88888888, "尼玛市", RegionType.City)
+Geocoding.addRegionEntry(888888, 8888888, "泥煤市", RegionType.District)
+
+>> 输入: 中国尼玛省尼玛市泥煤市泥煤大道888号xxx
+>> 输出:
+Address(
+	provinceId=88888888, province=尼玛省, 
+	cityId=8888888, city=尼玛市, 
+	districtId=888888, district=泥煤市, 
+	streetId=null, street=null, 
+	townId=null, town=null, 
+	villageId=null, village=null, 
+	road=泥煤大道, 
+	roadNum=888号, 
+	buildingNum=null, 
+	text=xxx
+)
+```
+
+> Tips: 可以从「国家标准地址库」中获取「父级城市ID」 
 
 # 2. 说明
 

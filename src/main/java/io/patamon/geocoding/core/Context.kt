@@ -49,4 +49,29 @@ object Context {
         computer ?: throw IllegalArgumentException("[Context] -> 地址计算服务类初始化失败.")
         return computer!!
     }
+
+
+    ///////////////////////
+    // Open API
+    ///////////////////////
+
+
+    fun registInterpreter(interpreter: AddressInterpreter) {
+        synchronized(this) {
+            this.interpreter = interpreter
+        }
+    }
+
+    fun registPersister(persister: AddressPersister) {
+        synchronized(this) {
+            this.persister = persister
+        }
+    }
+
+    fun registComputer(computer: Computer) {
+        synchronized(this) {
+            this.computer = computer
+        }
+    }
+
 }
