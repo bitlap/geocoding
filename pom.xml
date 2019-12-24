@@ -180,4 +180,12 @@
             <url>https://dl.bintray.com/kotlin/kotlin-dev/</url>
         </pluginRepository>
     </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Maven Packages</name>
+            <url>https://maven.pkg.github.com/IceMimosa/geocoding</url>
+        </repository>
+    </distributionManagement>
 </project>
