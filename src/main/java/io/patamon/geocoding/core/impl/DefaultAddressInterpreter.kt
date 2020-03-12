@@ -257,8 +257,8 @@ open class DefaultAddressInterpreter : AddressInterpreter {
             p.matcher("$it").find()
         }
 
-        // 将地址中的 一 -- 等替换为-
-        entity.text = entity.text?.replace(Regex("[一_－/]|(--)"), "-")
+        // 将地址中的 ー－—- 等替换为-
+        entity.text = entity.text?.replace(Regex("[ー_－—/]|(--)"), "-")
     }
 
     // 提取建筑物号

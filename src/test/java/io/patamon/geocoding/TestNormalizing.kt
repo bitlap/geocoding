@@ -63,10 +63,10 @@ class TestNormalizing {
                         null, null,
                         null, null,
                         null, null,
+                        "北一路",
+                        "",
                         null,
-                        null,
-                        null,
-                        "北路虹桥商厦西行100米邮政储蓄银行北路支行附近"
+                        "虹桥商厦西行100米邮政储蓄银行北一路支行附近"
                 )
         )
         assertEquals(Geocoding.normalizing("辽宁 沈阳 辽中县中国辽宁 沈阳 辽中县虹桥商厦苏宁易购"),
@@ -221,7 +221,7 @@ class TestNormalizing {
                         null, null,
                         null, null,
                         null, null,
-                        "南十西路",
+                        "南十一西路",
                         "",
                         "12号楼472",
                         "附近第九医院沈阳"
@@ -277,7 +277,7 @@ class TestNormalizing {
                         null, null,
                         null, null,
                         null, null,
-                        "环内会武街",
+                        "一环内会武街",
                         "56号",
                         "4-3-2",
                         ""
@@ -363,7 +363,7 @@ class TestNormalizing {
                         null, null,
                         "泡崖街玉境路",
                         "26号",
-                        "3—2—1",
+                        "3-2-1",
                         ""
                 )
         )
@@ -395,6 +395,20 @@ class TestNormalizing {
                         "2号院",
                         "1号楼",
                         "北侧楼房"
+                )
+        )
+        assertEquals(Geocoding.normalizing("福建福州鼓楼区六一路111号金三桥大厦"),
+                Address(
+                        350000000000, "福建省",
+                        350100000000, "福州市",
+                        350102000000, "鼓楼区",
+                        null, null,
+                        null, null,
+                        null, null,
+                        "六一路",
+                        "111号",
+                        null,
+                        "金三桥大厦"
                 )
         )
     }
