@@ -13,7 +13,7 @@
     <dependency>
         <groupId>io.patamon.geocoding</groupId>
         <artifactId>geocoding</artifactId>
-        <version>1.1.3</version>
+        <version>1.1.4</version>
     </dependency>
 </dependencies>
 
@@ -30,6 +30,8 @@
 
 * 1.1.3
   * 新增自定义地址设置
+* 1.1.4
+  * 修复一些匹配错误的bug
  
 # 1. 数据测试
 
