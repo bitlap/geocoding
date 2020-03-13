@@ -14,6 +14,13 @@ import kotlin.test.assertEquals
 class TestNormalizing {
 
     @Test
+    fun test() {
+        val add = Geocoding.normalizing("广东省河源市源城区中山大道16号华怡小区")
+
+        println(add)
+    }
+
+    @Test
     fun testNormalizing() {
         assertEquals(Geocoding.normalizing("江苏泰州兴化市昌荣镇【康琴网吧】 (昌荣镇附近)"),
                 Address(
@@ -397,6 +404,7 @@ class TestNormalizing {
                         "北侧楼房"
                 )
         )
+        // Fix issues #10
         assertEquals(Geocoding.normalizing("福建福州鼓楼区六一路111号金三桥大厦"),
                 Address(
                         350000000000, "福建省",
@@ -409,6 +417,36 @@ class TestNormalizing {
                         "111号",
                         null,
                         "金三桥大厦"
+                )
+        )
+        // Fix issues #8
+        assertEquals(Geocoding.normalizing("广东省河源市源城区中山大道16号华怡小区"),
+                Address(
+                        440000000000, "广东省",
+                        441600000000,"河源市",
+                        441602000000,"源城区",
+                        null, null,
+                        null, null,
+                        null, null,
+                        "中山大道",
+                        "16号",
+                        null,
+                        "华怡小区"
+                )
+
+        )
+        assertEquals(Geocoding.normalizing("广东省河源市中山大道16号华怡小区"),
+                Address(
+                        440000000000, "广东省",
+                        441600000000,"河源市",
+                        null,null,
+                        null, null,
+                        null, null,
+                        null, null,
+                        "中山大道",
+                        "16号",
+                        null,
+                        "华怡小区"
                 )
         )
     }

@@ -106,7 +106,7 @@ open class RegionInterpreterVisitor (
                 if (!isFullMatch(entry, region) && pos + 1 <= text.length - 1) {
                     if (region.type == Province
                             || region.type == City
-                            || region.type == District
+                            || region.type in listOf(CityLevelDistrict, District)
                             || region.type == RegionType.Street
                             || region.type == RegionType.Town) { // 县区或街道
 
@@ -128,6 +128,29 @@ open class RegionInterpreterVisitor (
                 continue
             }
 
+            // 对于省市区全部匹配, 并且当前term属于非完全匹配的时候
+            // 需要忽略掉当前term, 以免污染已经匹配的省市区
+            if (!isFullMatch(entry, region) && hasThreeDivision()) {
+                when (region.type) {
+                    Province -> {
+                        if (region.id != curDivision.province!!.id) {
+                            continue@loop
+                        }
+                    }
+                    City, CityLevelDistrict -> {
+                        if (region.id != curDivision.city!!.id) {
+                            continue@loop
+                        }
+                    }
+                    District -> {
+                        if (region.id != curDivision.district!!.id) {
+                            continue@loop
+                        }
+                    }
+                    else -> { }
+                }
+            }
+
             // 已经匹配上部分省市区，按下面规则判断最匹配项
             // 高优先级的排除情况
             if (!isFullMatch(entry, region) && pos + 1 <= text.length - 1) { // 使用别名匹配，并且后面还有一个字符
@@ -135,7 +158,11 @@ open class RegionInterpreterVisitor (
                 //   错误匹配方式：提取省市区时，将【万子湖村】中的字符【万子湖】匹配成【万子湖乡】，剩下一个【村】。
                 // 2. 广东广州白云区均和街新市镇
                 //   白云区下面有均和街道，街道、乡镇使用别名匹配时，后续字符不能是某些行政区域和道路关键字符
-                if (region.type == RegionType.Street || region.type == RegionType.Town) { //街道、乡镇
+                if (region.type == Province
+                        || region.type == City
+                        || region.type in listOf(CityLevelDistrict, District)
+                        || region.type == RegionType.Street
+                        || region.type == RegionType.Town) { //街道、乡镇
                     when (text[pos + 1]) {
                         '区', '县', '乡', '镇', '村', '街', '路' -> continue@loop
                         '大' -> if (pos + 2 <= text.length - 1) {
