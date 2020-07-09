@@ -27,8 +27,8 @@ class TestSegments {
         println(">>> simple 分词: ")
         println(simple.segment(text))
 
-        println(">>> smart 分词: ")
-        println(smart.segment(text))
+//        println(">>> smart 分词: ")
+//        println(smart.segment(text))
 
 //        println(">>> word 分词: ")
 //        println(word.segment(text))

@@ -216,7 +216,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
 
         val entity = AddressEntity(address)
 
-        // 清洗下开头垃圾数据, 针对海尔用户数据
+        // 清洗下开头垃圾数据, 针对用户数据
         prepare(entity)
         // extractBuildingNum, 提取建筑物号
         extractBuildingNum(entity)

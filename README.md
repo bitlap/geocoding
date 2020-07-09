@@ -13,7 +13,7 @@
     <dependency>
         <groupId>io.patamon.geocoding</groupId>
         <artifactId>geocoding</artifactId>
-        <version>1.1.4</version>
+        <version>1.1.5</version>
     </dependency>
 </dependencies>
 

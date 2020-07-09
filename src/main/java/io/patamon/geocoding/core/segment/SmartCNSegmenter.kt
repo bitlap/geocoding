@@ -1,8 +1,8 @@
 package io.patamon.geocoding.core.segment
 
 import io.patamon.geocoding.core.Segmenter
-import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
+//import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer
+//import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
 
 /**
  * Desc: lucene 的 smartCN 分词器
@@ -12,7 +12,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
  */
 open class SmartCNSegmenter : Segmenter {
 
-    private val ANALYZER = SmartChineseAnalyzer()
+//    private val ANALYZER = SmartChineseAnalyzer()
 
     /**
      * 分词方法
@@ -20,14 +20,14 @@ open class SmartCNSegmenter : Segmenter {
     override fun segment(text: String): List<String> {
         val segs = arrayListOf<String>()
         // 切分
-        val ts = ANALYZER.tokenStream("text", text)
-        ts.reset()
-        while (ts.incrementToken()) {
-            val attr = ts.getAttribute(CharTermAttribute::class.java)
-            segs.add(attr.toString())
-        }
-        ts.end()
-        ts.close()
+//        val ts = ANALYZER.tokenStream("text", text)
+//        ts.reset()
+//        while (ts.incrementToken()) {
+//            val attr = ts.getAttribute(CharTermAttribute::class.java)
+//            segs.add(attr.toString())
+//        }
+//        ts.end()
+//        ts.close()
         return segs
     }
 
