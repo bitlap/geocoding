@@ -69,4 +69,8 @@ open class RegionEntity : Serializable {
     override fun hashCode(): Int {
         return this.id.hashCode()
     }
+
+    override fun toString(): String {
+        return "${this.id}:${this.name}"
+    }
 }

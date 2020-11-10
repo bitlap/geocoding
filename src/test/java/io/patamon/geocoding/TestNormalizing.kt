@@ -457,6 +457,19 @@ class TestNormalizing {
                         "中国建设银河西湖支行"
                 )
         )
+        assertEquals(Geocoding.normalizing("江西赣州市赣县区王母渡镇"),
+                Address(
+                        360000000000, "江西省",
+                        360700000000, "赣州市",
+                        360721000000, "赣县区",
+                        360721101000, "王母渡镇",
+                        360721101000, "王母渡镇",
+                        null, village=null,
+                        null,
+                        null,
+                        null,
+                        ""
+                ))
     }
 
 

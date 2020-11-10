@@ -13,7 +13,7 @@
     <dependency>
         <groupId>io.patamon.geocoding</groupId>
         <artifactId>geocoding</artifactId>
-        <version>1.1.5</version>
+        <version>1.1.6</version>
     </dependency>
 </dependencies>
 
@@ -25,13 +25,6 @@
     </repository>
 </repositories>
 ```
-
-## Release Log
-
-* 1.1.3
-  * 新增自定义地址设置
-* 1.1.4
-  * 修复一些匹配错误的bug
  
 # 1. 数据测试
 
@@ -159,6 +152,16 @@ Address(
 
 
 项目参考[address-semantic-search][4]，简化了流程，修复了各种不规则错误，使得使用更加方便。
+
+
+## Release Log
+
+* 1.1.3
+  * 新增自定义地址设置
+* 1.1.4
+  * 修复一些匹配错误的bug
+* 1.1.6
+  * 升级地址库和包版本, 修复一些匹配错误的地址
 
 [1]:https://lsp.wuliu.taobao.com/locationservice/addr/output_address_town.do
 [2]:http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2015/index.html
