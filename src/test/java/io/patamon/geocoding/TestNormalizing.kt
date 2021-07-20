@@ -464,7 +464,7 @@ class TestNormalizing {
                         360721000000, "赣县区",
                         360721101000, "王母渡镇",
                         360721101000, "王母渡镇",
-                        null, village=null,
+                        null, null,
                         null,
                         null,
                         null,
