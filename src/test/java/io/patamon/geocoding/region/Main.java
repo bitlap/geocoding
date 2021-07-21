@@ -3,6 +3,7 @@ package io.patamon.geocoding.region;
 import java.io.IOException;
 
 import io.patamon.geocoding.region.model.RegionEntity;
+import io.patamon.geocoding.region.util.OutUtil;
 
 public class Main {
     
@@ -12,10 +13,8 @@ public class Main {
         String pathname = "~/Documents/cnarea" + 20210707 + ".dat";
         RegionDatFileHelper.writeDatFile(pathname);
         long end = System.currentTimeMillis();
-        System.out.println(String.format("cost %s ms", end - start));
-        RegionEntity regionEntity = null;
-        regionEntity = RegionDatFileHelper.readDatFile(pathname);
-        System.out.println(regionEntity);
+        OutUtil.info(String.format("cost %s ms", end - start));
+        RegionEntity regionEntity = RegionDatFileHelper.readDatFile(pathname);
+        OutUtil.info(regionEntity.toString());
     }
-
 }
