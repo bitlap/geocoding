@@ -1,4 +1,4 @@
-package io.patamon.geocoding.utils;
+package io.patamon.geocoding.region;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,39 +16,28 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 
-import io.patamon.geocoding.model.RegionEntityEx;
 import io.patamon.geocoding.model.RegionType;
+import io.patamon.geocoding.region.model.RegionEntity;
+import io.patamon.geocoding.region.util.JdbcUtil;
 import kotlin.text.Charsets;
 
-public class DatFileHelper {
+public class RegionDatFileHelper {
 
     final static List<String> provinceLevelCity1 = Lists.newArrayList("北京市", "天津市", "上海市", "重庆市");
 
-    // 导入数据库成功后，执行china.sql，插入数据项：【中国】
-    public static void main(String[] args) throws IOException {
-        long start = System.currentTimeMillis();
-        String pathname = "~/Documents/cnarea" + 20210707 + ".dat";
-        writeDatFile(pathname);
-        long end = System.currentTimeMillis();
-        System.out.println(String.format("cost %s ms", end - start));
-        RegionEntityEx regionEntity = null;
-        regionEntity = fromDatFile(pathname);
-        System.out.println(regionEntity);
-    }
-
-    private static void writeDatFile(String pathname) throws IOException {
+    public static void writeDatFile(String pathname) throws IOException {
         Connection conn = JdbcUtil.getConnection();
         if (conn == null) return;
-        List<RegionEntityEx> china = Lists.newArrayList();
-        List<RegionEntityEx> provinces = RegionEntityHelper.findProvinces(conn);
+        List<RegionEntity> china = Lists.newArrayList();
+        List<RegionEntity> provinces = RegionSqlHelper.findProvinces(conn);
         for (int i = 0; i < provinces.size(); i++) {
-            RegionEntityEx province = provinces.get(i);
-            List<RegionEntityEx> list = RegionEntityHelper.findByProvince(conn, province.getShortName() + "%");
+            RegionEntity province = provinces.get(i);
+            List<RegionEntity> list = RegionSqlHelper.findByProvince(conn, province.getShortName() + "%");
             if (i == 0) {
-                List<RegionEntityEx> tree = parseProvince(list);
+                List<RegionEntity> tree = parseProvince(list);
                 china.add(tree.get(0));
             } else {
-                List<RegionEntityEx> tree = parseProvince(list);
+                List<RegionEntity> tree = parseProvince(list);
                 china.get(0).getChildren().add(tree.get(0));
             }
         }
@@ -59,10 +48,10 @@ public class DatFileHelper {
         write(pathname, new String(context, Charsets.UTF_8));
     }
 
-    public static List<RegionEntityEx> parseProvince(List<RegionEntityEx> list) {
-        List<RegionEntityEx> province = Lists.newArrayList();
+    private static List<RegionEntity> parseProvince(List<RegionEntity> list) {
+        List<RegionEntity> province = Lists.newArrayList();
 
-        for (RegionEntityEx entity : list) {
+        for (RegionEntity entity : list) {
             if (entity.getParentId().equals(0L)) {
                 if (entity.getChildren() == null) entity.setChildren(Lists.newArrayList());
                 entity.setType(of(entity.getId(), entity.getLevel(), entity.getName()));
@@ -70,16 +59,16 @@ public class DatFileHelper {
             }
         }
 
-        for (RegionEntityEx item : province) {
+        for (RegionEntity item : province) {
             item = recursive(item, list, province.size());
         }
 
         return province;
     }
 
-    public static RegionEntityEx recursive(RegionEntityEx parent, List<RegionEntityEx> list, int j) {
+    private static RegionEntity recursive(RegionEntity parent, List<RegionEntity> list, int j) {
         for (int i = j; i < list.size(); i++) {
-            RegionEntityEx entity = list.get(i);
+            RegionEntity entity = list.get(i);
             if (parent.getId().equals(entity.getParentId())) {
                 entity = recursive(entity, list, i + 1);
                 entity.setType(of(entity.getId(), entity.getLevel(), entity.getName()));
@@ -90,7 +79,7 @@ public class DatFileHelper {
         return parent;
     }
 
-    public static void write(final String fileName, final String contents) throws IOException {
+    private static void write(final String fileName, final String contents) throws IOException {
         File file = new File(fileName);
         file.deleteOnExit();
         file.createNewFile();
@@ -118,10 +107,10 @@ public class DatFileHelper {
         return RegionType.Undefined;
     }
 
-    private static RegionEntityEx fromDatFile(String file) throws IOException {
+    public static RegionEntity readDatFile(String file) throws IOException {
         byte[] byteArray = Files.toByteArray(new File(file));
         String json = new String(byteArray);
-        return new Gson().fromJson(decode(json), RegionEntityEx.class);
+        return new Gson().fromJson(decode(json), RegionEntity.class);
     }
 
     private static String decode(String str) throws IOException {
@@ -130,7 +119,7 @@ public class DatFileHelper {
         return new String(IOUtils.toByteArray(gzipis), Charsets.UTF_8);
     }
 
-    public static byte[] encode(String str) throws IOException {
+    private static byte[] encode(String str) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         GZIPOutputStream gzipos = new GZIPOutputStream(out);
         gzipos.write(str.getBytes(Charsets.UTF_8));

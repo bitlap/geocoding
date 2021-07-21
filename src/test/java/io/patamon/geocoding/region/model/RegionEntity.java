@@ -1,11 +1,16 @@
-package io.patamon.geocoding.model;
+package io.patamon.geocoding.region.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
 
-public class RegionEntityEx {
+import io.patamon.geocoding.model.RegionType;
 
+public class RegionEntity implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+    
     private Long id = 0L;
     private Long parentId = 0L;
     @Expose(serialize = false, deserialize = false)
@@ -16,7 +21,7 @@ public class RegionEntityEx {
     private String alias = "";
     private RegionType type = RegionType.Undefined;
     private String zip = "";
-    private List<RegionEntityEx> children = null;
+    private List<RegionEntity> children = null;
     private List<String> orderedNames = null;
 
     public Long getId() {
@@ -83,11 +88,11 @@ public class RegionEntityEx {
         this.zip = zip;
     }
 
-    public List<RegionEntityEx> getChildren() {
+    public List<RegionEntity> getChildren() {
         return children;
     }
 
-    public void setChildren(List<RegionEntityEx> children) {
+    public void setChildren(List<RegionEntity> children) {
         this.children = children;
     }
 

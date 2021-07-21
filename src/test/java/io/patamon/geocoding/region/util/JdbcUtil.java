@@ -1,4 +1,4 @@
-package io.patamon.geocoding.utils;
+package io.patamon.geocoding.region.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

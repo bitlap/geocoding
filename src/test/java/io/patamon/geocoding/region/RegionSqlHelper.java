@@ -1,4 +1,4 @@
-package io.patamon.geocoding.utils;
+package io.patamon.geocoding.region;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,9 +8,11 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import io.patamon.geocoding.model.RegionEntityEx;
+import io.patamon.geocoding.region.model.RegionEntity;
+import io.patamon.geocoding.region.util.JdbcUtil;
+import io.patamon.geocoding.region.util.OutUtil;
 
-public class RegionEntityHelper {
+public class RegionSqlHelper {
 
     private static final String sqlFindAllProvinces = "select `level`, area_code as id, parent_code as parentId, "
             + "`name` as `name`, short_name as shortName, merger_name as `alias`, zip_code as zip "
@@ -20,7 +22,7 @@ public class RegionEntityHelper {
             + "`name` as `name`, short_name as shortName, merger_name as `alias`, zip_code as zip "
             + "from cnarea_2020 where merger_name like ? order by `level`, parent_code, area_code";
 
-    public static List<RegionEntityEx> findProvinces(Connection conn) {
+    public static List<RegionEntity> findProvinces(Connection conn) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
@@ -37,7 +39,7 @@ public class RegionEntityHelper {
     }
 
 
-    public static List<RegionEntityEx> findByProvince(Connection conn, String name) {
+    public static List<RegionEntity> findByProvince(Connection conn, String name) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
@@ -54,18 +56,18 @@ public class RegionEntityHelper {
         return Lists.newArrayList();
     }
     
-    private static List<RegionEntityEx> convert(ResultSet rs) throws SQLException {
-        List<RegionEntityEx> list = Lists.newArrayList();
+    private static List<RegionEntity> convert(ResultSet rs) throws SQLException {
+        List<RegionEntity> list = Lists.newArrayList();
         while (rs != null && rs.next()) {
-            RegionEntityEx regionEntityEx = new RegionEntityEx();
-            regionEntityEx.setAlias(rs.getString("alias"));
-            regionEntityEx.setId(rs.getLong("id"));
-            regionEntityEx.setLevel(rs.getInt("level"));
-            regionEntityEx.setName(rs.getString("name"));
-            regionEntityEx.setParentId(rs.getLong("parentId"));
-            regionEntityEx.setShortName(rs.getString("shortName"));
-            regionEntityEx.setZip(rs.getString("zip"));
-            list.add(regionEntityEx);
+            RegionEntity regionEntity = new RegionEntity();
+            regionEntity.setAlias(rs.getString("alias"));
+            regionEntity.setId(rs.getLong("id"));
+            regionEntity.setLevel(rs.getInt("level"));
+            regionEntity.setName(rs.getString("name"));
+            regionEntity.setParentId(rs.getLong("parentId"));
+            regionEntity.setShortName(rs.getString("shortName"));
+            regionEntity.setZip(rs.getString("zip"));
+            list.add(regionEntity);
         }
         return list;
     }
