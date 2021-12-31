@@ -138,15 +138,8 @@ Address(
 
 也可以采用[国家的标准地址库][2] (对应的github库, [中国5级行政区域mysql库][3])
 
-### 2.1.1 导入中国5级行政区域mysql库注意事项
-0. 本测试配置基于Server version: 8.0.21 MySQL Community Server - GPL环境，其它可能略有差异，可通过下面两个SQL确认配置是否OK
-```
-show variables like '%CHARACTER%';
-show variables like '%max_allowed_packet%';
-```
-1. 设置max_allowed_packet，[mysqld]下max_allowed_packet = 2000M，[mysqldump]下max_allowed_packet = 2000M
-2. 设置字符集，[client]下default-character-set=utf8mb4，[mysqld]下character-set-server=utf8mb4和init_connect='SET NAMES utf8mb4'，[mysql]下default-character-set=utf8mb4
-
+## 2.2 导入中国5级行政区域mysql库注意事项
+[参考文档](https://github.com/IceMimosa/geocoding/blob/master/src/test/java/io/patamon/geocoding/region/README.md)
 
 ## 2.2 标准化
 1. 首先基于正则提取出道路、建筑物号等信息

@@ -26,6 +26,7 @@ public class RegionDatFileHelper {
     final static List<String> provinceLevelCity1 = Lists.newArrayList("北京市", "天津市", "上海市", "重庆市");
 
     public static void writeDatFile(String pathname) throws IOException {
+        write(pathname, "");
         Connection conn = JdbcUtil.getConnection();
         if (conn == null) return;
         List<RegionEntity> china = Lists.newArrayList();
@@ -81,9 +82,14 @@ public class RegionDatFileHelper {
 
     private static void write(final String fileName, final String contents) throws IOException {
         File file = new File(fileName);
-        file.deleteOnExit();
-        file.createNewFile();
-        Files.write(contents.getBytes(), file);
+        // file.deleteOnExit();
+        if (!file.exists()) {
+            Files.createParentDirs(file);
+            file.createNewFile();
+        }
+        if (contents != null && !contents.trim().isEmpty()) {
+            Files.write(contents.getBytes(), file);
+        }
     }
 
     private static RegionType of(Long id, int level, String name) {
