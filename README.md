@@ -134,11 +134,10 @@ Address(
 # 2. 说明
 
 ## 2.1 标准地址库
-项目目前采用的是 [淘宝物流4级地址][1] 的标准地址库
+项目目前采用的是 [淘宝物流4级地址][1] 的标准地址库, 也可以采用[国家的标准地址库][2] (对应的github库, [中国5级行政区域mysql库][3]).
 
-也可以采用[国家的标准地址库][2] (对应的github库, [中国5级行政区域mysql库][3])
+### 导入中国5级行政区域mysql库注意事项
 
-## 2.2 导入中国5级行政区域mysql库注意事项
 [参考文档](https://github.com/IceMimosa/geocoding/blob/master/src/test/java/io/patamon/geocoding/region/README.md)
 
 ## 2.2 标准化
