@@ -22,12 +22,25 @@
 
 <repositories>
     <repository>
-        <id>patamon.release.repository</id>
+        <id>geocoding</id>
         <name>github release repository</name>
-        <url>https://raw.github.com/icemimosa/maven/release/</url>
+        <url>https://maven.pkg.github.com/IceMimosa/geocoding</url>
     </repository>
 </repositories>
 ```
+
+> PS: 需要申请github token才能访问, [Authenticating to GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages). 比如在 `~/.m2/settings.xml` 添加如下, [token申请地址](https://github.com/settings/tokens)
+
+```xml
+<servers>
+  <server>
+    <id>geocoding</id>
+    <username>[YOUR_NAME]</username>
+    <password>[YOUR_TOKEN]</password>
+  </server>
+<servers>
+```
+
  
 # 1. 数据测试
 
