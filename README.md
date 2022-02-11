@@ -170,6 +170,10 @@ Address(
 
 项目参考[address-semantic-search][4]，简化了流程，修复了各种不规则错误，使得使用更加方便。
 
+## 感谢
+
+* Python封装库：[casuallyName/Geocoding](https://github.com/casuallyName/Geocoding)
+
 
 ## Release Log
 
