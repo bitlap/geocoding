@@ -14,9 +14,10 @@
 ```xml
 <dependencies>
     <dependency>
-        <groupId>io.patamon.geocoding</groupId>
+        <!--  从1.2.0开始迁移到bitlap，原groupId: io.patamon.geocoding     -->
+        <groupId>org.bitlap</groupId> 
         <artifactId>geocoding</artifactId>
-        <version>1.1.6</version>
+        <version>1.2.0</version>
     </dependency>
 </dependencies>
 
@@ -151,7 +152,7 @@ Address(
 
 ### 导入中国5级行政区域mysql库注意事项
 
-[参考文档](https://github.com/IceMimosa/geocoding/blob/master/src/test/java/io/patamon/geocoding/region/README.md)
+[参考文档](https://github.com/bitlap/geocoding/blob/master/src/test/java/org/bitlap/geocoding/region/README.md)
 
 ## 2.2 标准化
 1. 首先基于正则提取出道路、建筑物号等信息
@@ -183,6 +184,8 @@ Address(
   * 修复一些匹配错误的bug
 * 1.1.6
   * 升级地址库和包版本, 修复一些匹配错误的地址
+* 1.2.0
+  - geocoding项目转移到组织：bitlap/geocoding
 
 [1]:https://lsp.wuliu.taobao.com/locationservice/addr/output_address_town.do
 [2]:http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2015/index.html

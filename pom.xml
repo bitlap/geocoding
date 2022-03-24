@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.patamon.geocoding</groupId>
+    <groupId>org.bitlap</groupId>
     <artifactId>geocoding</artifactId>
-    <version>1.1.6</version>
+    <version>1.2.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -190,6 +190,7 @@
             <url>https://dl.bintray.com/kotlin/kotlin-dev/</url>
         </repository>
     </repositories>
+    
     <pluginRepositories>
         <pluginRepository>
             <id>kotlin.repo</id>
@@ -199,10 +200,15 @@
     </pluginRepositories>
 
     <distributionManagement>
+        <snapshotRepository>
+            <id>central</id>
+            <name>Maven Snapshots</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
         <repository>
-            <id>github</id>
-            <name>GitHub Maven Packages</name>
-            <url>https://maven.pkg.github.com/IceMimosa/geocoding</url>
+            <id>central</id>
+            <name>Maven Releases</name>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 </project>
