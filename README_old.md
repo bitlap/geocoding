@@ -1,6 +1,5 @@
 
 [![Java 8 CI](https://github.com/IceMimosa/geocoding/actions/workflows/java8.yml/badge.svg)](https://github.com/IceMimosa/geocoding/actions/workflows/java8.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/org.bitlap/geocoding)](https://search.maven.org/search?q=g:%22org.bitlap%22%20AND%20a:%22geocoding%22)
 
 # 介绍
 本项目旨在将不规范(或者连续)的文本地址进行尽可能的**标准化**, 以及对两个地址进行**相似度的计算**。
@@ -11,18 +10,38 @@
  * 相似度计算
 
 ## pom
-
+ 
 ```xml
 <dependencies>
     <dependency>
-        <!--  从1.2.0开始迁移到bitlap，原groupId: io.patamon.geocoding     -->
-        <groupId>org.bitlap</groupId> 
+        <groupId>io.patamon.geocoding</groupId>
         <artifactId>geocoding</artifactId>
-        <version>1.2.0</version>
+        <version>1.1.6</version>
     </dependency>
 </dependencies>
+
+<repositories>
+    <repository>
+        <id>geocoding</id>
+        <name>github release repository</name>
+        <url>https://maven.pkg.github.com/IceMimosa/geocoding</url>
+    </repository>
+</repositories>
 ```
 
+> PS: 需要申请github token才能访问, [Authenticating to GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages). 比如在 `~/.m2/settings.xml` 添加如下, [token申请地址](https://github.com/settings/tokens)
+
+```xml
+<servers>
+  <server>
+    <id>geocoding</id>
+    <username>[YOUR_NAME]</username>
+    <password>[YOUR_TOKEN]</password>
+  </server>
+<servers>
+```
+
+ 
 # 1. 数据测试
 
 方法调用: `Geocoding` 类
