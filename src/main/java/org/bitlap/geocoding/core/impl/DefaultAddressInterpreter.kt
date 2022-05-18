@@ -1,8 +1,7 @@
 package org.bitlap.geocoding.core.impl
 
 import org.bitlap.geocoding.core.AddressInterpreter
-import org.bitlap.geocoding.core.Context
-import org.bitlap.geocoding.core.Context.getVisitor
+import org.bitlap.geocoding.core.AddressPersister
 import org.bitlap.geocoding.core.TermIndexVisitor
 import org.bitlap.geocoding.index.TermIndexBuilder
 import org.bitlap.geocoding.index.TermType
@@ -22,7 +21,7 @@ import java.util.regex.Pattern
  * Created by IceMimosa
  * Date: 2017/1/17
  */
-open class DefaultAddressInterpreter : AddressInterpreter {
+open class DefaultAddressInterpreter(val persister: AddressPersister, val visitor: TermIndexVisitor) : AddressInterpreter {
 
     private var indexBuilder: TermIndexBuilder? = null
     private val ignoringRegionNames = mutableListOf(
@@ -36,7 +35,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
 
     init {
         // 初始化索引builder
-        indexBuilder = TermIndexBuilder(Context.getPersister().getRootRegion(), ignoringRegionNames)
+        indexBuilder = TermIndexBuilder(persister.getRootRegion(), ignoringRegionNames)
     }
 
 
@@ -208,7 +207,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
      * 将`脏`地址进行标准化处理, 解析成 [AddressEntity]
      */
     override fun interpret(address: String?): AddressEntity? {
-        return interpret(address, getVisitor())
+        return interpret(address, visitor)
     }
 
     private fun interpret(address: String?, visitor: TermIndexVisitor): AddressEntity? {
@@ -356,7 +355,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
         // 去除building
         var building = entity.buildingNum
         if (building.isNullOrBlank()) return
-        building = building!!.remove(specialChars1, "-一－_#")
+        building = building.remove(specialChars1, "-一－_#")
         building = building.removeRepeatNum(6)
         entity.buildingNum = building
     }
@@ -573,7 +572,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
             }
 
             if (!c.isNullOrBlank()) { //村
-                if (c!!.endsWith("农村")) return result
+                if (c.endsWith("农村")) return result
                 var leftString = text.take(ic)
                 if (c.endsWith("村村")) {
                     c = c.head(c.length - 1)
@@ -628,7 +627,7 @@ open class DefaultAddressInterpreter : AddressInterpreter {
         }
 
         // 排除一些特殊情况：草滩街镇、西乡街镇等
-        if (town!!.length == 4 && town[2] == '街') return -1
+        if (town.length == 4 && town[2] == '街') return -1
 
         return 1
     }

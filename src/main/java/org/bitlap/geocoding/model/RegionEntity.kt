@@ -34,14 +34,14 @@ open class RegionEntity : Serializable {
         val fields = mutableListOf(this.name)
         if (this.alias.isBlank()) return fields
         this.alias.split(";").forEach {
-            if (!it.isBlank()) {
+            if (it.isNotBlank()) {
                 fields.add(it)
             }
         }
         // 按长度倒序
-        fields.sortWith(Comparator { t1, t2 ->
+        fields.sortWith { t1, t2 ->
             t2.length - t1.length
-        })
+        }
         return fields
     }
 

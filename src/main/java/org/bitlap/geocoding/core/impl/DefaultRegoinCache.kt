@@ -15,7 +15,7 @@ import java.util.zip.GZIPInputStream
  * Created by IceMimosa
  * Date: 2017/1/12
  */
-open class DefaultRegoinCache : RegionCache {
+open class DefaultRegionCache(dataClassPath: String) : RegionCache {
 
     private var regions: RegionEntity? = null
     private val REGION_CACHE = hashMapOf<Long, RegionEntity>()
@@ -23,10 +23,12 @@ open class DefaultRegoinCache : RegionCache {
     init {
         // 加载区域数据
         if (regions == null) {
-            regions = Gson().fromJson(decode(String(this.javaClass.classLoader.getResourceAsStream("core/region.dat").readBytes())), RegionEntity::class.java)
+            val input = this.javaClass.classLoader.getResourceAsStream(dataClassPath)
+                ?: throw IllegalArgumentException("Geocoding data file does not exist.")
+            regions = Gson().fromJson(decode(String(input.readBytes())), RegionEntity::class.java)
         }
         // 加载cache
-        REGION_CACHE.put(regions!!.id, regions!!)
+        REGION_CACHE[regions!!.id] = regions!!
         loadChildrenInCache(regions)
     }
 
@@ -39,7 +41,7 @@ open class DefaultRegoinCache : RegionCache {
 
         // 递归children
         parent.children?.forEach {
-            REGION_CACHE.put(it.id, it)
+            REGION_CACHE[it.id] = it
             this.loadChildrenInCache(it)
         }
     }
