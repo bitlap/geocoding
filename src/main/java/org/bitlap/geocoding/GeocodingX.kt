@@ -16,6 +16,13 @@ open class GeocodingX(val ctx: Context) {
     constructor(): this(false)
     constructor(strict: Boolean): this("core/region.dat", strict)
     constructor(dataClassPath: String): this(dataClassPath, false)
+
+    /**
+     * @param dataClassPath 自定义地址文档的classpath路径
+     * @param strict 解析模式, 默认为false。当发现没有省和市，且匹配的父项数量等于1时，能成功匹配。
+     *  * true: 严格模式，当发现没有省和市，且匹配的父项数量大于0时，返回null
+     *  * false: 非严格模式，当发现没有省和市，且匹配的父项数量大于0时，匹配随机一项省和市
+     */
     constructor(dataClassPath: String, strict: Boolean): this(Context(dataClassPath, strict))
 
     /**
