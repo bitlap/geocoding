@@ -24,7 +24,7 @@ open class DefaultRegionCache(dataClassPath: String) : RegionCache {
         // 加载区域数据
         if (regions == null) {
             val input = this.javaClass.classLoader.getResourceAsStream(dataClassPath)
-                ?: throw IllegalArgumentException("Geocoding data file does not exist.")
+                ?: throw IllegalArgumentException("Geocoding data file [$dataClassPath] does not exist.")
             regions = Gson().fromJson(decode(String(input.readBytes())), RegionEntity::class.java)
         }
         // 加载cache

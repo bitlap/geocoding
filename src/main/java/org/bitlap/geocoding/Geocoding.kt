@@ -14,7 +14,7 @@ import org.bitlap.geocoding.similarity.MatchedResult
  */
 object Geocoding {
 
-    @JvmStatic
+    @JvmField
     val DEFAULT = GeocodingX()
 
     /**
