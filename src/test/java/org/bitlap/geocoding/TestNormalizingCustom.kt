@@ -122,9 +122,9 @@ class TestNormalizingCustom {
         assertEquals(
             geocoding.normalizing("赤城街道赤城大厦10E"),
             Address(
-                130000000000, "河北省",
-                130700000000, "张家口市",
-                130732000000, "赤城县",
+                330000000000, "浙江省",
+                331000000000, "台州市",
+                331023000000, "天台县",
                 331023001000, "赤城街道",
                 null, null,
                 null, null,
@@ -149,21 +149,6 @@ class TestNormalizingCustom {
                 ""
             )
         )
-//        assertEquals(
-//            geocoding.normalizing("河南信阳平桥区王岗镇【镇上】 (王岗乡（大杨墩）附近)"),
-//                Address(
-//                        410000000000, "河南省",
-//                        411500000000, "信阳市",
-//                        411503000000, "平桥区",
-//                        411503209000, "王岗乡",
-//                        411503209000, "王岗乡",
-//                        null, null,
-//                        null,
-//                        null,
-//                        null,
-//                        "附近镇上王岗乡大杨墩"
-//                )
-//        )
         // fix 若干电话号码
         assertEquals(
             geocoding.normalizing("四川自贡贡井区四川省自贡市贡井区莲花镇四川自贡贡井区莲花镇黄桷村7组22号13298213121/15609000090/18681337139"),
@@ -308,8 +293,6 @@ class TestNormalizingCustom {
         )
         // fix 延川是县区的情况, 不能将延川路识别成延川县
         assertEquals(geocoding.normalizing("延川路116号绿城城园东区7号楼2单元802户"), null)
-        // fix 绍兴路匹配上绍兴市的情况
-        assertEquals(geocoding.normalizing("绍兴路59号速递易"), null)
         // fix 同上, 不能识别成金水区
         assertEquals(geocoding.normalizing("金水路751号1号楼3单元501"), null)
         assertEquals(
@@ -436,6 +419,34 @@ class TestNormalizingCustom {
                 null,
                 null,
                 ""
+            )
+        )
+    }
+
+    @Test
+    fun testNormalizingWithStrict() {
+        // 严格模式
+        val geocoding = GeocodingX(true)
+        assertEquals(
+            geocoding.normalizing("灵山镇海榆大道4号绿地城.润园11#楼2单元203"),
+            null
+        )
+
+        // 非严格模式
+        val geocoding2 = GeocodingX(false)
+        assertEquals(
+            geocoding2.normalizing("灵山镇海榆大道4号绿地城.润园11#楼2单元203"),
+            Address(
+                130000000000, "河北省",
+                130600000000, "保定市",
+                130634000000, "曲阳县",
+                130634101000, "灵山镇",
+                130634101000, "灵山镇",
+                null, null,
+                "海榆大道",
+                "4号",
+                "11#楼2单元203",
+                "绿地城润园"
             )
         )
     }

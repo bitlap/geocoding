@@ -13,8 +13,10 @@ import org.bitlap.geocoding.similarity.MatchedResult
  */
 open class GeocodingX(val ctx: Context) {
 
-    constructor(): this("core/region.dat")
-    constructor(dataClassPath: String): this(Context(dataClassPath))
+    constructor(): this(false)
+    constructor(strict: Boolean): this("core/region.dat", strict)
+    constructor(dataClassPath: String): this(dataClassPath, false)
+    constructor(dataClassPath: String, strict: Boolean): this(Context(dataClassPath, strict))
 
     /**
      * 地址的标准化, 将不规范的地址清洗成标准的地址格式
@@ -27,8 +29,8 @@ open class GeocodingX(val ctx: Context) {
      * 将地址进行切分
      */
     fun analyze(address: String): Document? {
-        val addr = normalizing(address) ?: return null
-        return ctx.computer.analyze(addr)
+        val add = normalizing(address) ?: return null
+        return ctx.computer.analyze(add)
     }
     fun analyze(address: Address?): Document? {
         address ?: return null
@@ -38,29 +40,29 @@ open class GeocodingX(val ctx: Context) {
     /**
      * 地址的相似度计算
      */
-    fun similarity(addr1: String, addr2: String): Double {
+    fun similarity(address1: String, address2: String): Double {
         val compute = ctx.computer.compute(
-            normalizing(addr1),
-            normalizing(addr2)
+            normalizing(address1),
+            normalizing(address2)
         )
         return compute.similarity
     }
-    fun similarity(addr1: Address?, addr2: Address?): Double {
-        val compute = ctx.computer.compute(addr1, addr2)
+    fun similarity(address1: Address?, address2: Address?): Double {
+        val compute = ctx.computer.compute(address1, address2)
         return compute.similarity
     }
 
     /**
      * 地址相似度计算, 包含匹配的所有结果
      */
-    fun similarityWithResult(addr1: String, addr2: String): MatchedResult {
+    fun similarityWithResult(address1: String, address2: String): MatchedResult {
         return ctx.computer.compute(
-            normalizing(addr1),
-            normalizing(addr2)
+            normalizing(address1),
+            normalizing(address2)
         )
     }
-    fun similarityWithResult(addr1: Address?, addr2: Address?): MatchedResult {
-        return ctx.computer.compute(addr1, addr2)
+    fun similarityWithResult(address1: Address?, address2: Address?): MatchedResult {
+        return ctx.computer.compute(address1, address2)
     }
 
     /**

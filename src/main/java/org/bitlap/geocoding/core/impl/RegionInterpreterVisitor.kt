@@ -7,7 +7,6 @@ import org.bitlap.geocoding.index.TermIndexItem
 import org.bitlap.geocoding.index.TermType
 import org.bitlap.geocoding.model.Division
 import org.bitlap.geocoding.model.RegionEntity
-import org.bitlap.geocoding.model.RegionType
 import org.bitlap.geocoding.model.RegionType.City
 import org.bitlap.geocoding.model.RegionType.CityLevelDistrict
 import org.bitlap.geocoding.model.RegionType.District
@@ -18,7 +17,8 @@ import org.bitlap.geocoding.model.RegionType.ProvinceLevelCity2
 import org.bitlap.geocoding.model.RegionType.Street
 import org.bitlap.geocoding.model.RegionType.Town
 import org.bitlap.geocoding.model.RegionType.Village
-import java.util.*
+
+import java.util.ArrayDeque
 
 /**
  * Desc: 基于倒排索引搜索匹配省市区行政区划的访问者
@@ -28,7 +28,8 @@ import java.util.*
  */
 open class RegionInterpreterVisitor (
         // 地址持久层对象
-        val persister: AddressPersister
+        val persister: AddressPersister,
+        val strict: Boolean
 ) : TermIndexVisitor {
 
     private var currentLevel = 0
@@ -73,7 +74,7 @@ open class RegionInterpreterVisitor (
         if (isFullMatch(entry, region))
             fullMatchCount++
         currentPos = positioning(region, entry, text, pos) // 当前结束的位置
-        updateCurrentDivisionState(region) // 刷新当前已经匹配上的省市区
+        updateCurrentDivisionState(region, entry) // 刷新当前已经匹配上的省市区
 
         return true
     }
@@ -82,9 +83,8 @@ open class RegionInterpreterVisitor (
         var mostPriority = -1
         var acceptableItem: TermIndexItem? = null
 
-        entry.items ?: return null
         // 每个 被索引对象循环，找出最匹配的
-        loop@ for (item in entry.items!!) {
+        loop@ for (item in entry.items) {
             // 仅处理省市区类型的 被索引对象，忽略其它类型的
             if (!isAcceptableItemType(item.type!!)) continue
 
@@ -106,9 +106,9 @@ open class RegionInterpreterVisitor (
                 if (!isFullMatch(entry, region) && pos + 1 <= text.length - 1) {
                     if (region.type == Province
                             || region.type == City
-                            || region.type in listOf(CityLevelDistrict, District)
-                            || region.type == RegionType.Street
-                            || region.type == RegionType.Town) { // 县区或街道
+                            || region.type == CityLevelDistrict || region.type == District
+                            || region.type == Street || region.type == PlatformL4
+                            || region.type == Town) { // 县区或街道
 
                         // 如果是某某路, 街等
                         when (text[pos + 1]) {
@@ -161,8 +161,8 @@ open class RegionInterpreterVisitor (
                 if (region.type == Province
                         || region.type == City
                         || region.type in listOf(CityLevelDistrict, District)
-                        || region.type == RegionType.Street
-                        || region.type == RegionType.Town) { //街道、乡镇
+                        || region.type == Street
+                        || region.type == Town) { //街道、乡镇
                     when (text[pos + 1]) {
                         '区', '县', '乡', '镇', '村', '街', '路' -> continue@loop
                         '大' -> if (pos + 2 <= text.length - 1) {
@@ -183,7 +183,7 @@ open class RegionInterpreterVisitor (
             if (mostPriority == -1 || mostPriority > 2) {
                 val parent = persister.getRegion(region.parentId)
                 // 2.1 缺地级市
-                if (!curDivision.hasCity() && curDivision.hasProvince() && region.type == RegionType.District
+                if (!curDivision.hasCity() && curDivision.hasProvince() && region.type == District
                         && curDivision.province!!.id == parent!!.parentId) {
                     mostPriority = 2
                     acceptableItem = item
@@ -191,8 +191,8 @@ open class RegionInterpreterVisitor (
                 }
                 // 2.2 缺区县
                 if (!curDivision.hasDistrict() && curDivision.hasCity()
-                        && (region.type == RegionType.Street || region.type == RegionType.Town
-                        || region.type == RegionType.PlatformL4 || region.type == RegionType.Village)
+                        && (region.type == Street || region.type == Town
+                        || region.type == PlatformL4 || region.type == Village)
                         && curDivision.city!!.id == parent!!.parentId) {
                     mostPriority = 2
                     acceptableItem = item
@@ -225,7 +225,7 @@ open class RegionInterpreterVisitor (
                 // 新疆->阿拉尔市
                 // 错误匹配方式：新疆 阿克苏地区 阿拉尔市，会导致在【阿克苏地区】下面无法匹配到【阿拉尔市】
                 // 正确匹配结果：新疆 阿拉尔市
-                if (region.type == RegionType.CityLevelDistrict
+                if (region.type == CityLevelDistrict
                         && curDivision.hasProvince() && curDivision.province!!.id == region.parentId) {
                     mostPriority = 4
                     acceptableItem = item
@@ -233,7 +233,7 @@ open class RegionInterpreterVisitor (
                 }
                 // 4.2 地级市-区县从属关系错误，但区县对应的省份正确，则将使用区县的地级市覆盖已匹配的地级市
                 // 主要是地级市的管辖范围有调整，或者由于外部系统地级市与区县对应关系有调整导致
-                if (region.type == RegionType.District // 必须是普通区县
+                if (region.type == District // 必须是普通区县
                         && curDivision.hasCity() && curDivision.hasProvince()
                         && isFullMatch(entry, region) // 使用的全名匹配
                         && curDivision.city!!.id != region.parentId) {
@@ -247,8 +247,8 @@ open class RegionInterpreterVisitor (
             }
 
             // 5. 街道、乡镇，且不符合上述情况
-            if (region.type == RegionType.Street || region.type == RegionType.Town
-                    || region.type == RegionType.Village || region.type == RegionType.PlatformL4) {
+            if (region.type == Street || region.type == Town
+                    || region.type == Village || region.type == PlatformL4) {
                 if (!curDivision.hasDistrict()) {
                     var parent = persister.getRegion(region.parentId) // parent为区县
                     parent = persister.getRegion(parent!!.parentId) // parent为地级市
@@ -280,10 +280,10 @@ open class RegionInterpreterVisitor (
      * 索引对象是否是可接受的省市区等类型。
      */
     private fun isAcceptableItemType(type: TermType): Boolean {
-        when (type) {
+        return when (type) {
             TermType.Province, TermType.City, TermType.District,
-            TermType.Street, TermType.Town, TermType.Village, TermType.Ignore -> return true
-            else -> return false
+            TermType.Street, TermType.Town, TermType.Village, TermType.Ignore -> true
+            else -> false
         }
     }
 
@@ -326,7 +326,7 @@ open class RegionInterpreterVisitor (
      * 更新当前已匹配区域对象的状态。
      * @param region
      */
-    private fun updateCurrentDivisionState(region: RegionEntity?) {
+    private fun updateCurrentDivisionState(region: RegionEntity?, entry: TermIndexEntry) {
         if (region == null) return
         // region为重复项，无需更新状态
         if (region == curDivision.province || region == curDivision.city
@@ -334,6 +334,8 @@ open class RegionInterpreterVisitor (
                 || region == curDivision.town || region == curDivision.village)
             return
 
+        // 非严格模式 || 只有一个父项
+        val needUpdateCityAndProvince = !strict || (entry.items.size == 1)
         when (region.type) {
             Province, ProvinceLevelCity1 -> {
                 curDivision.province = region
@@ -359,17 +361,39 @@ open class RegionInterpreterVisitor (
             }
             Street, PlatformL4 -> {
                 if (!curDivision.hasStreet()) curDivision.street = region
-                if (!curDivision.hasDistrict()) curDivision.district = persister.getRegion(region.parentId)
+                if (!curDivision.hasDistrict()) {
+                    curDivision.district = persister.getRegion(region.parentId)
+                }
+                if (needUpdateCityAndProvince) {
+                    updateCityAndProvince(curDivision.district)
+                }
             }
             Town -> {
                 if (!curDivision.hasTown()) curDivision.town = region
                 if (!curDivision.hasDistrict()) curDivision.district = persister.getRegion(region.parentId)
+                if (needUpdateCityAndProvince) {
+                    updateCityAndProvince(curDivision.district)
+                }
             }
             Village -> {
                 if (!curDivision.hasVillage()) curDivision.village = region
                 if (!curDivision.hasDistrict()) curDivision.district = persister.getRegion(region.parentId)
+                if (needUpdateCityAndProvince) {
+                    updateCityAndProvince(curDivision.district)
+                }
             }
             else -> { }
+        }
+    }
+
+    private fun updateCityAndProvince(distinct: RegionEntity?) {
+        if (distinct == null) return
+        if (!curDivision.hasCity()) {
+            curDivision.city = persister.getRegion(distinct.parentId)?.also { city ->
+                if (!curDivision.hasProvince()) {
+                    curDivision.province = persister.getRegion(city.parentId)
+                }
+            }
         }
     }
 

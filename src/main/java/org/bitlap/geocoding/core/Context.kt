@@ -14,8 +14,9 @@ import org.bitlap.geocoding.core.impl.SimilarityComputer
  */
 open class Context(
     val dataClassPath: String,
+    val strict: Boolean,
     val persister: AddressPersister = DefaultAddressPersister(DefaultRegionCache(dataClassPath)),
-    val visitor: TermIndexVisitor = RegionInterpreterVisitor(persister),
+    val visitor: TermIndexVisitor = RegionInterpreterVisitor(persister, strict),
     val interpreter: AddressInterpreter = DefaultAddressInterpreter(persister, visitor),
     val computer: Computer = SimilarityComputer(),
 ) {
