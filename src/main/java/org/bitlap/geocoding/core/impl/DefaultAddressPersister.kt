@@ -12,8 +12,8 @@ import org.bitlap.geocoding.model.RegionEntity
  * Date: 2017/1/17
  */
 open class DefaultAddressPersister (
-        // 行政规划准地址库
-        private val regionCache: RegionCache
+    // 行政规划准地址库
+    private val regionCache: RegionCache
 ) : AddressPersister {
 
     /**

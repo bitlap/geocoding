@@ -5,7 +5,7 @@ import org.bitlap.geocoding.core.RegionCache
 import org.bitlap.geocoding.model.RegionEntity
 import org.bitlap.geocoding.model.RegionType
 import java.io.ByteArrayInputStream
-import java.util.*
+import java.util.Base64
 import java.util.zip.GZIPInputStream
 
 /**
