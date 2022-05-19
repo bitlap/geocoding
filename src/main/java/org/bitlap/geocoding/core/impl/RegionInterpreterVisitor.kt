@@ -361,9 +361,7 @@ open class RegionInterpreterVisitor (
             }
             Street, PlatformL4 -> {
                 if (!curDivision.hasStreet()) curDivision.street = region
-                if (!curDivision.hasDistrict()) {
-                    curDivision.district = persister.getRegion(region.parentId)
-                }
+                if (!curDivision.hasDistrict()) curDivision.district = persister.getRegion(region.parentId)
                 if (needUpdateCityAndProvince) {
                     updateCityAndProvince(curDivision.district)
                 }
