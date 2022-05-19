@@ -18,7 +18,7 @@
         <!--  从1.2.0开始迁移到bitlap，原groupId: io.patamon.geocoding     -->
         <groupId>org.bitlap</groupId> 
         <artifactId>geocoding</artifactId>
-        <version>1.2.0</version>
+        <version>1.3.0</version>
     </dependency>
 </dependencies>
 ```
@@ -184,6 +184,9 @@ Address(
   * 升级地址库和包版本, 修复一些匹配错误的地址
 * 1.2.0
   - geocoding项目转移到组织：bitlap/geocoding
+* 1.3.0
+  * 新增自定义地址文件库配置参数
+  * 添加自定义地址新增replace参数
 
 [1]:https://lsp.wuliu.taobao.com/locationservice/addr/output_address_town.do
 [2]:http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2015/index.html
