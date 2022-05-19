@@ -2,6 +2,7 @@ package org.bitlap.geocoding;
 
 import org.bitlap.geocoding.core.Context
 import org.bitlap.geocoding.model.Address
+import org.bitlap.geocoding.model.RegionEntity
 import org.bitlap.geocoding.model.RegionType
 import org.bitlap.geocoding.similarity.Document
 import org.bitlap.geocoding.similarity.MatchedResult
@@ -61,6 +62,13 @@ object Geocoding {
         return DEFAULT.similarityWithResult(address1, address2)
     }
 
+    /**
+     * 深度优先匹配符合[text]的地址信息
+     */
+    fun match(text: String): List<RegionEntity> {
+        return DEFAULT.match(text)
+    }
+
     @JvmStatic
     fun getContext(): Context = DEFAULT.ctx
 
@@ -72,10 +80,11 @@ object Geocoding {
      * @param name        地址的名称
      * @param type        地址类型, [RegionType]
      * @param alias       地址的别名
+     * @param replace     是否替换旧地址, 当除了[id]之外的字段, 如果相等就替换
      */
     @JvmStatic
-    fun addRegionEntry(id: Long, parentId: Long, name: String, type: RegionType = RegionType.Undefined, alias: String = ""): Geocoding {
-        DEFAULT.addRegionEntry(id, parentId, name, type, alias)
+    fun addRegionEntry(id: Long, parentId: Long, name: String, type: RegionType = RegionType.Undefined, alias: String = "", replace: Boolean = true): Geocoding {
+        DEFAULT.addRegionEntry(id, parentId, name, type, alias, replace)
         return this
     }
 }

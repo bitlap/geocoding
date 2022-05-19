@@ -47,4 +47,36 @@ class TestNormalizingAddRegionEntry {
                 )
         )
     }
+
+    @Test
+    fun testNormalizingReplace() {
+        Geocoding.addRegionEntry(888888, 321200000000, "泥煤市", RegionType.District)
+        assertEquals(Geocoding.normalizing("江苏泰州泥煤市泥煤大道888号"),
+            Address(
+                320000000000, "江苏省",
+                321200000000, "泰州市",
+                888888, "泥煤市",
+                null, null,
+                null, null,
+                null, null,
+                "泥煤大道", "888号",
+                null,
+                ""
+            )
+        )
+        Geocoding.addRegionEntry(888889, 321200000000, "泥煤市", RegionType.District)
+        assertEquals(Geocoding.normalizing("江苏泰州泥煤市泥煤大道888号"),
+            Address(
+                320000000000, "江苏省",
+                321200000000, "泰州市",
+                888889, "泥煤市",
+                null, null,
+                null, null,
+                null, null,
+                "泥煤大道", "888号",
+                null,
+                ""
+            )
+        )
+    }
 }

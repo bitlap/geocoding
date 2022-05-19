@@ -25,7 +25,7 @@ open class TermIndexEntry {
     /**
      * 初始化倒排索引
      */
-    fun buildIndex(text: String?, pos: Int, item: TermIndexItem) {
+    fun buildIndex(text: String?, pos: Int, item: TermIndexItem, replace: Boolean) {
         if (text.isNullOrBlank() || pos < 0 || pos >=text.length) {
             return
         }
@@ -37,9 +37,12 @@ open class TermIndexEntry {
             this.children[c] = entry
         }
         if (pos == text.length - 1) {
+            if (replace && item.value != null) {
+                entry.items.removeIf { item.value.equalsWithoutId(it.value) }
+            }
             entry.addItem(item)
             return
         }
-        entry.buildIndex(text, pos + 1, item)
+        entry.buildIndex(text, pos + 1, item, replace)
     }
 }

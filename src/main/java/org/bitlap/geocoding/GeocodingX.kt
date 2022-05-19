@@ -73,6 +73,14 @@ open class GeocodingX(val ctx: Context) {
     }
 
     /**
+     * 深度优先匹配符合[text]的地址信息
+     */
+    fun match(text: String): List<RegionEntity> {
+        val terms = ctx.interpreter.getTermIndexBuilder().fullMatch(text) ?: emptyList()
+        return terms.mapNotNull { it.value }
+    }
+
+    /**
      * 设置自定义地址
      *
      * @param id          地址的ID
@@ -80,8 +88,9 @@ open class GeocodingX(val ctx: Context) {
      * @param name        地址的名称
      * @param type        地址类型, [RegionType]
      * @param alias       地址的别名
+     * @param replace     是否替换旧地址, 当除了[id]之外的字段, 如果相等就替换
      */
-    fun addRegionEntry(id: Long, parentId: Long, name: String, type: RegionType = RegionType.Undefined, alias: String = "") {
+    fun addRegionEntry(id: Long, parentId: Long, name: String, type: RegionType = RegionType.Undefined, alias: String = "", replace: Boolean = true) {
         ctx.persister.getRegion(parentId) ?: throw IllegalArgumentException("Parent Address is not exists, parentId is $parentId")
         if (name.isBlank()) {
             throw IllegalArgumentException("name should not be blank.")
@@ -97,6 +106,6 @@ open class GeocodingX(val ctx: Context) {
         ctx.persister.addRegionEntity(region)
         // 2. Build term index
         val indexBuilder = ctx.interpreter.getTermIndexBuilder()
-        indexBuilder.indexRegions(listOf(region))
+        indexBuilder.indexRegions(listOf(region), replace)
     }
 }

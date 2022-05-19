@@ -22,24 +22,25 @@ import org.bitlap.geocoding.utils.head
  * Date: 2017/1/17
  */
 open class TermIndexBuilder(
-        rootRegion: RegionEntity,
-        ignoringRegionNames: List<String>
+    rootRegion: RegionEntity,
+    ignoringRegionNames: List<String>
 ) {
 
     private val indexRoot = TermIndexEntry()
 
     init {
         this.indexRegions(rootRegion.children ?: emptyList())
-        this.indexIgnorings(ignoringRegionNames)
+        this.indexIgnoring(ignoringRegionNames)
     }
 
     // 为行政区划(标准地址库建立倒排索引)
-    fun indexRegions(regions: List<RegionEntity>) { synchronized(this) {
+    @Synchronized
+    fun indexRegions(regions: List<RegionEntity>, replace: Boolean = false) {
         if (regions.isEmpty()) return
         for (region in regions) {
             val indexItem = TermIndexItem(convertRegionType(region), region)
             for (alias in region.orderedNames ?: emptyList()) {
-                indexRoot.buildIndex(alias, 0, indexItem)
+                indexRoot.buildIndex(alias, 0, indexItem, replace)
             }
 
             //1. 为xx街道，建立xx镇、xx乡的别名索引项
@@ -62,12 +63,12 @@ open class TermIndexBuilder(
                 }
                 // 建立索引
                 if (shortName.length >= 2) {
-                    indexRoot.buildIndex(shortName, 0, indexItem)
+                    indexRoot.buildIndex(shortName, 0, indexItem, replace)
                 }
                 if (rName.endsWith("街道") || rName.endsWith("镇"))
-                    indexRoot.buildIndex(shortName + "乡", 0, indexItem)
+                    indexRoot.buildIndex(shortName + "乡", 0, indexItem, replace)
                 if (rName.endsWith("街道") || rName.endsWith("乡"))
-                    indexRoot.buildIndex(shortName + "镇", 0, indexItem)
+                    indexRoot.buildIndex(shortName + "镇", 0, indexItem, replace)
             }
 
             // 递归
@@ -75,17 +76,18 @@ open class TermIndexBuilder(
                 this.indexRegions(region.children!!)
             }
         }
-    } }
+    }
 
     /**
      * 为忽略列表建立倒排索引
      */
-    fun indexIgnorings(ignoringRegionNames: List<String>) { synchronized(this) {
+    @Synchronized
+    fun indexIgnoring(ignoringRegionNames: List<String>, replace: Boolean = false) {
         if (ignoringRegionNames.isEmpty()) return
         for (ignore in ignoringRegionNames) {
-            indexRoot.buildIndex(ignore, 0, TermIndexItem(TermType.Ignore, null))
+            indexRoot.buildIndex(ignore, 0, TermIndexItem(TermType.Ignore, null), replace)
         }
-    } }
+    }
 
     // 获取 region 的类型
     private fun convertRegionType(region: RegionEntity): TermType =
