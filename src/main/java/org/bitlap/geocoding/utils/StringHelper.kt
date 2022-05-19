@@ -13,7 +13,7 @@ package org.bitlap.geocoding.utils
  * 此处优化边界处理
  */
 fun String?.head(length: Int): String? {
-    if (this.isNullOrBlank() || this!!.length <= length) return this
+    if (this.isNullOrBlank() || this.length <= length) return this
     if (length <= 0) return ""
     return this.substring(0, length)
 }
@@ -23,7 +23,7 @@ fun String?.head(length: Int): String? {
  * 此处优化边界处理
  */
 fun String?.tail(length: Int): String? {
-    if (this.isNullOrBlank() || this!!.length <= length) return this
+    if (this.isNullOrBlank() || this.length <= length) return this
     if (length <= 0) return ""
     return this.substring(this.length - length)
 }
@@ -84,14 +84,14 @@ fun String.removeRepeatNum(length: Int): String {
             return@forEachIndexed
         }
         // 如果小于重复出现的长度
-        if (count > 0 && count < length) {
+        if (count in 1 until length) {
             sb.append(this.take(i - count, i - 1))
         }
         // 重置标志
         count = 0
         sb.append(c)
     }
-    if (count > 0 && count < length) {
+    if (count in 1 until length) {
         sb.append(this.tail(count))
     }
     return sb.toString()
@@ -102,7 +102,7 @@ fun String.removeRepeatNum(length: Int): String {
  */
 fun String?.isNumericChars(): Boolean {
     if (this.isNullOrBlank()) return false
-    return this!!.none {
+    return this.none {
         it !in '0'..'9'
     }
 }
@@ -112,7 +112,7 @@ fun String?.isNumericChars(): Boolean {
  */
 fun String?.isAsciiChars(): Boolean {
     if (this.isNullOrBlank()) return false
-    return this!!.none {
+    return this.none {
         it !in 'a'..'z' && it !in 'A'..'Z'
     }
 }

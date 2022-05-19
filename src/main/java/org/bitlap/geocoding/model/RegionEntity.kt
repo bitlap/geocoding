@@ -34,14 +34,14 @@ open class RegionEntity : Serializable {
         val fields = mutableListOf(this.name)
         if (this.alias.isBlank()) return fields
         this.alias.split(";").forEach {
-            if (!it.isBlank()) {
+            if (it.isNotBlank()) {
                 fields.add(it)
             }
         }
         // 按长度倒序
-        fields.sortWith(Comparator { t1, t2 ->
+        fields.sortWith { t1, t2 ->
             t2.length - t1.length
-        })
+        }
         return fields
     }
 
@@ -70,7 +70,20 @@ open class RegionEntity : Serializable {
         return this.id.hashCode()
     }
 
+    fun equalsWithoutId(other: Any?): Boolean {
+        if (other == null || other.javaClass != RegionEntity::class.java) return false
+        other as RegionEntity
+
+        if (parentId != other.parentId) return false
+        if (name != other.name) return false
+        if (alias != other.alias) return false
+        if (type != other.type) return false
+        if (zip != other.zip) return false
+
+        return true
+    }
+
     override fun toString(): String {
-        return "${this.id}:${this.name}"
+        return "RegionEntity(id=$id, parentId=$parentId, name='$name', alias='$alias', type=$type, zip='$zip')"
     }
 }
