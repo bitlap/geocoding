@@ -65,6 +65,7 @@ object Geocoding {
     /**
      * 深度优先匹配符合[text]的地址信息
      */
+    @JvmStatic
     fun match(text: String): List<RegionEntity> {
         return DEFAULT.match(text)
     }

@@ -90,7 +90,7 @@ open class GeocodingX(val ctx: Context) {
      * @param alias       地址的别名
      * @param replace     是否替换旧地址, 当除了[id]之外的字段, 如果相等就替换
      */
-    fun addRegionEntry(id: Long, parentId: Long, name: String, type: RegionType = RegionType.Undefined, alias: String = "", replace: Boolean = true) {
+    fun addRegionEntry(id: Long, parentId: Long, name: String, type: RegionType = RegionType.Undefined, alias: String = "", replace: Boolean = true): GeocodingX {
         ctx.persister.getRegion(parentId) ?: throw IllegalArgumentException("Parent Address is not exists, parentId is $parentId")
         if (name.isBlank()) {
             throw IllegalArgumentException("name should not be blank.")
@@ -107,5 +107,6 @@ open class GeocodingX(val ctx: Context) {
         // 2. Build term index
         val indexBuilder = ctx.interpreter.getTermIndexBuilder()
         indexBuilder.indexRegions(listOf(region), replace)
+        return this
     }
 }
