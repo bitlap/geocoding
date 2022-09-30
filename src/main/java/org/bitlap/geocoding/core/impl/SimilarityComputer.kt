@@ -25,11 +25,11 @@ import org.bitlap.geocoding.utils.isNumericChars
 /**
  * Desc: 相似度算法相关逻辑
  *
- * 1. >>>>> 关于 TF-IDF
- *  TC: 词数 Term Count, 某个词在文档中出现的次数
- *  TF: 词频 Term Frequency, 某个词在文档中出现的频率. TF = 该词在文档中出现的次数 / 该文档的总词数
- *  IDF: 逆文档词频 Inverse Document Frequency. IDF = log( 语料库文档总数 / ( 包含该词的文档数 + 1 ) ). 分母加1是为了防止分母出现0的情况
- *  TF-IDF: 词条的特征值, TF-IDF = TF * IDF
+ * * 关于 TF-IDF
+ *   * TC: 词数 Term Count, 某个词在文档中出现的次数
+ *   * TF: 词频 Term Frequency, 某个词在文档中出现的频率. TF = 该词在文档中出现的次数 / 该文档的总词数
+ *   * IDF: 逆文档词频 Inverse Document Frequency. IDF = log( 语料库文档总数 / ( 包含该词的文档数 + 1 ) ). 分母加1是为了防止分母出现0的情况
+ *   * TF-IDF: 词条的特征值, TF-IDF = TF * IDF
  *
  * Mail: chk19940609@gmail.com
  * Created by IceMimosa
