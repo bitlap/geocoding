@@ -21,7 +21,7 @@ import java.util.regex.Pattern
  * Created by IceMimosa
  * Date: 2017/1/17
  */
-open class DefaultAddressInterpreter(val persister: AddressPersister, val visitor: TermIndexVisitor) : AddressInterpreter {
+open class DefaultAddressInterpreter(val persister: AddressPersister, val strict: Boolean) : AddressInterpreter {
 
     private var indexBuilder: TermIndexBuilder? = null
     private val ignoringRegionNames = mutableListOf(
@@ -207,7 +207,7 @@ open class DefaultAddressInterpreter(val persister: AddressPersister, val visito
      * 将`脏`地址进行标准化处理, 解析成 [AddressEntity]
      */
     override fun interpret(address: String?): AddressEntity? {
-        return interpret(address, visitor)
+        return interpret(address, RegionInterpreterVisitor(persister, strict))
     }
 
     private fun interpret(address: String?, visitor: TermIndexVisitor): AddressEntity? {
