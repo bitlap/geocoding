@@ -1,6 +1,8 @@
 package org.bitlap.geocoding
 
 import org.junit.Test
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 
 /**
  * Desc: 测试相似度
@@ -48,5 +50,23 @@ open class TestSimilarity {
         println("addr2 >>>> $addr2")
 
         println("相似度结果分析 >>>>>>>>> " + Geocoding.similarityWithResult(addr1, addr2))
+    }
+
+    @Test
+    fun test_similarity_threads() {
+        val pool = Executors.newFixedThreadPool(10)
+
+        val addr1 = "中国湖南郴州宜章县梅田镇【梅田镇】(梅田镇附近)"
+        val addr2 = "湖南省郴州市宜章县梅田镇上寮村2组"
+
+        (1 .. 1000).map {
+            pool.submit(Callable {
+                Geocoding.similarity(addr1, addr2)
+            })
+        }.forEach {
+            val r = it.get()
+            assert(0.8164965809277261 == r)
+        }
+        pool.shutdown()
     }
 }

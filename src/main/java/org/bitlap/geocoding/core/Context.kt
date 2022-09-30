@@ -3,7 +3,6 @@ package org.bitlap.geocoding.core
 import org.bitlap.geocoding.core.impl.DefaultAddressInterpreter
 import org.bitlap.geocoding.core.impl.DefaultAddressPersister
 import org.bitlap.geocoding.core.impl.DefaultRegionCache
-import org.bitlap.geocoding.core.impl.RegionInterpreterVisitor
 import org.bitlap.geocoding.core.impl.SimilarityComputer
 
 /**
@@ -16,8 +15,7 @@ open class Context(
     val dataClassPath: String,
     val strict: Boolean,
     val persister: AddressPersister = DefaultAddressPersister(DefaultRegionCache(dataClassPath)),
-    val visitor: TermIndexVisitor = RegionInterpreterVisitor(persister, strict),
-    val interpreter: AddressInterpreter = DefaultAddressInterpreter(persister, visitor),
+    val interpreter: AddressInterpreter = DefaultAddressInterpreter(persister, strict),
     val computer: Computer = SimilarityComputer(),
 ) {
 
