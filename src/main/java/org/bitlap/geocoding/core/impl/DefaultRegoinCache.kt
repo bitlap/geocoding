@@ -5,8 +5,12 @@ import org.bitlap.geocoding.core.RegionCache
 import org.bitlap.geocoding.model.RegionEntity
 import org.bitlap.geocoding.model.RegionType
 import java.io.ByteArrayInputStream
-import java.util.Base64
+import java.io.ByteArrayOutputStream
+import java.io.FileOutputStream
+import java.util.*
 import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
+import kotlin.text.Charsets.UTF_8
 
 /**
  * Desc: 默认 [RegionEntity] 获取的缓存类
@@ -75,5 +79,17 @@ open class DefaultRegionCache(dataClassPath: String) : RegionCache {
         this.loadChildrenInCache(entity)
         this.REGION_CACHE[entity.id] = entity
         this.REGION_CACHE[entity.parentId]?.children?.add(entity)
+    }
+
+    /**
+     * 保存一个新的dat文件
+     */
+    override fun save(path: String) {
+        val gzip = ByteArrayOutputStream()
+        GZIPOutputStream(gzip, 8192).use { gzipos ->
+            gzipos.write(Gson().toJson(regions, RegionEntity::class.java).toByteArray(UTF_8))
+        }
+        val dat = Base64.getMimeEncoder().encode(gzip.toByteArray())
+        ByteArrayInputStream(dat).copyTo(FileOutputStream(path), 8192)
     }
 }

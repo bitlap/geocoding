@@ -25,4 +25,9 @@ interface AddressPersister {
      * 新增一个region信息
      */
     fun addRegionEntity(entity: RegionEntity)
+
+    /**
+     * 保存一个新的dat文件
+     */
+    fun save(path: String)
 }

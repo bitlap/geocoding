@@ -109,4 +109,8 @@ open class GeocodingX(val ctx: Context) {
         indexBuilder.indexRegions(listOf(region), replace)
         return this
     }
+
+    fun save(path: String) {
+        ctx.persister.save(path)
+    }
 }

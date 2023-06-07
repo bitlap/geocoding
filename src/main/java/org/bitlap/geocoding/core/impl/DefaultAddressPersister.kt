@@ -37,4 +37,10 @@ open class DefaultAddressPersister (
         regionCache.addRegionEntity(entity)
     }
 
+    /**
+     * 保存一个新的dat文件
+     */
+    override fun save(path: String) {
+        regionCache.save(path)
+    }
 }

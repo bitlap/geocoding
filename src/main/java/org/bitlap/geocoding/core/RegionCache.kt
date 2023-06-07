@@ -1,6 +1,6 @@
-package org.bitlap.geocoding.core;
+package org.bitlap.geocoding.core
 
-import org.bitlap.geocoding.model.RegionEntity;
+import org.bitlap.geocoding.model.RegionEntity
 
 /**
  * Desc: 获取 region entity 的抽象接口
@@ -26,4 +26,9 @@ interface RegionCache {
      * 新增一个region信息
      */
     fun addRegionEntity(entity: RegionEntity)
+
+    /**
+     * 保存一个新的dat文件
+     */
+    fun save(path: String)
 }
