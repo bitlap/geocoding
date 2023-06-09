@@ -102,6 +102,8 @@ open class GeocodingX(val ctx: Context) {
         region.name = name
         region.alias = alias
         region.type = type
+        // 暂时在这里初始化下级行政区划列表
+        region.children = arrayListOf()
         // 1. Add to cache (id -> Region)
         ctx.persister.addRegionEntity(region)
         // 2. Build term index

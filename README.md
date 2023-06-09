@@ -102,8 +102,14 @@ Address(
 ## 1.3 自定义地址文件设置
 
 ```kotlin
-// 文件生成方式见下文
+// 加载自定义地址文件
 val geocoding = GeocodingX("region_2021.dat")
+
+// 添加自定义区县"临平区"
+geocoding.addRegionEntry(330113000000, 330100000000, "临平区", RegionType.District, "", true)
+
+// 保存自定义字典文件
+geocoding.save("xxx.dat")
 ```
 
 ## 1.4 自定义地址设置
