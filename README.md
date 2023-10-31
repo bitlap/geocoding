@@ -1,7 +1,7 @@
 
 [![Project stage](https://img.shields.io/badge/Project%20Stage-Production%20Ready-brightgreen.svg)](https://github.com/bitlap/bitlap/wiki/Project-Stages)
 [![Java 8 CI](https://github.com/IceMimosa/geocoding/actions/workflows/java8.yml/badge.svg)](https://github.com/IceMimosa/geocoding/actions/workflows/java8.yml)
-[![Maven Central](https://central.sonatype.com/artifact/org.bitlap/geocoding)](https://search.maven.org/search?q=g:%22org.bitlap%22%20AND%20a:%22geocoding%22)
+[![Maven Central](https://img.shields.io/maven-central/v/org.bitlap/geocoding)](https://central.sonatype.com/artifact/org.bitlap/geocoding)
 
 # 介绍
 本项目旨在将不规范(或者连续)的文本地址进行尽可能的**标准化**, 以及对两个地址进行**相似度的计算**。
