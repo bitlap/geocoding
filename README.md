@@ -10,19 +10,8 @@
  * 地址标准库
  * 地址标准化
  * 相似度计算
-666
-## pom
-
-```xml
-<dependencies>
-    <dependency>
-        <!--  从1.2.0开始迁移到bitlap，原groupId: io.patamon.geocoding     -->
-        <groupId>org.bitlap</groupId> 
-        <artifactId>geocoding</artifactId>
-        <version>1.3.1</version>
-    </dependency>
-</dependencies>
-```
+## maven依赖
+  https://central.sonatype.com/artifact/org.bitlap/geocoding
 
 # 1. 数据测试
 
@@ -144,8 +133,8 @@ Address(
 ## 2.1 标准地址库
 项目目前采用的是 [淘宝物流4级地址][1] 的标准地址库, 也可以采用`国家的标准地址库` (对应的github库, [中国5级行政区域mysql库][3]).
 
-* [国家标准地址库2015][2]
-* [国家标准地址库2021](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2021/)
+* [国家标准地址库2023](http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/2023/)
+* [国家标准地址库2021](http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/2021/)
 
 ### 导入中国5级行政区域mysql库注意事项
 
