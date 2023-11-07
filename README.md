@@ -16,7 +16,6 @@
 ```xml
 <dependencies>
     <dependency>
-        <!--  从1.2.0开始迁移到bitlap，原groupId: io.patamon.geocoding     -->
         <groupId>org.bitlap</groupId> 
         <artifactId>geocoding</artifactId>
         <version>1.3.1</version>
@@ -142,8 +141,9 @@ Address(
 # 2. 说明
 
 ## 2.1 标准地址库
-项目目前采用的是 [淘宝物流4级地址][1] 的标准地址库, 也可以采用`国家的标准地址库` (对应的github库, [中国5级行政区域mysql库][3]).
+项目目前采用的是 [~~淘宝物流4级地址~~][1] （已过期，可通过淘宝收货地址获取实际调用地址）的标准地址库, 也可以采用`国家的标准地址库` (对应的github库, [中国5级行政区域mysql库][3]).
 * [国家标准地址库2023](http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/2023)
+* [国家标准地址库2022](http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/2022)
 * [国家标准地址库2021](http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/2021)
 
 ### 导入中国5级行政区域mysql库注意事项
@@ -152,8 +152,8 @@ Address(
 
 ## 2.2 标准地址库（兼容本项目）
 
-| 标准库文件          | 描述          | 参考                                                          | 感谢                                                                                   |
-|----------------|-------------|-------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| 标准库文件           | 描述          | 参考                                                          | 感谢                                                                                   |
+|-----------------|-------------|-------------------------------------------------------------|--------------------------------------------------------------------------------------|
 | region_2021.dat | 国家标准地址库2021 | [ISSUE-163](https://github.com/bitlap/geocoding/issues/163) | [TsLenMo](https://github.com/TsLenMo)、[weijiang.lin](https://github.com/linweijiang) |
 
 使用方式：文件下载到`classpath`，使用自定义的`GeocodingX`类即可。
@@ -189,6 +189,5 @@ Address(
 MIT
 
 [1]:https://lsp.wuliu.taobao.com/locationservice/addr/output_address_town.do
-[2]:http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2015/index.html
 [3]:https://github.com/kakuilan/china_area_mysql
 [4]:https://github.com/liuzhibin-cn/address-semantic-search
