@@ -384,14 +384,18 @@ open class RegionInterpreterVisitor (
         }
     }
 
-    private fun updateCityAndProvince(distinct: RegionEntity?) {
-        if (distinct == null) return
+    private fun updateCityAndProvince(district: RegionEntity?) {
+        if (district == null) return
         if (!curDivision.hasCity()) {
-            curDivision.city = persister.getRegion(distinct.parentId)?.also { city ->
-                if (!curDivision.hasProvince()) {
-                    curDivision.province = persister.getRegion(city.parentId)
-                }
+            // CityLevelDistrict类型的parent是省级因此直接赋值city
+            if (district.type == CityLevelDistrict) {
+                curDivision.city = district
+            } else {
+                curDivision.city = persister.getRegion(district.parentId)
             }
+        }
+        if (!curDivision.hasProvince() && curDivision.hasCity()) {
+            curDivision.province = persister.getRegion(curDivision.city!!.parentId)
         }
     }
 

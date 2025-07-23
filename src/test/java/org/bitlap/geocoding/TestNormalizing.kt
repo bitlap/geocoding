@@ -516,6 +516,22 @@ class TestNormalizing {
                 "绿地城润园"
             )
         )
+        // fix CityLevelDistrict 识别错误
+        assertEquals(
+            Geocoding.normalizing("陈场镇绿地城润园"),
+            Address(
+                420000000000, "湖北省",
+                429004000000, "仙桃市",
+                429004000000, "仙桃市",
+                429004114000, "陈场镇",
+                429004114000, "陈场镇",
+                null, null,
+                null,
+                null,
+                null,
+                "绿地城润园"
+            )
+        )
     }
 
 
